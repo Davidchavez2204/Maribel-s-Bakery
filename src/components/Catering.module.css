@@ -1,0 +1,14 @@
+.section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 56px;
+  align-items: center;
+  padding-block: 88px;
+}
+.copy { display: flex; flex-direction: column; gap: 22px; }
+.h2 { font-size: clamp(36px, 4vw, 52px); line-height: 1.05; text-wrap: balance; }
+.text { font-size: 17px; line-height: 1.65; text-wrap: pretty; }
+
+@media (max-width: 560px) {
+  .section { padding-block: 64px; gap: 36px; }
+}

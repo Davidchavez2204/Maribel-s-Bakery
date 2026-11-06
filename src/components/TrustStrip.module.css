@@ -1,0 +1,16 @@
+.strip { border-block: 1px solid var(--color-divider); }
+
+.grid {
+  list-style: none;
+  margin-block: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 40px;
+  padding-block: 40px;
+}
+
+.item { display: flex; gap: 16px; align-items: flex-start; }
+.icon { flex: none; }
+.copy { display: flex; flex-direction: column; gap: 6px; }
+.title { font-size: 24px; line-height: 1.1; }
+.text { font-size: 15px; line-height: 1.55; }

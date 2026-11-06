@@ -1,0 +1,29 @@
+.footer { border-top: 1px solid var(--color-divider); scroll-margin-top: 70px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 40px;
+  padding-block: 56px 40px;
+}
+.col { display: flex; flex-direction: column; gap: 10px; }
+.tagline { font-style: italic; font-size: 15px; }
+.label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+.phone { font-family: var(--font-heading); font-size: 34px; line-height: 1; text-decoration: none; color: var(--color-text); }
+.phone:hover { color: var(--color-accent-700); }
+.address { font-style: normal; font-size: 16px; line-height: 1.5; }
+
+.legal {
+  padding-block: 18px 28px;
+  border-top: 1px solid var(--color-divider);
+  font-size: 13px;
+  opacity: 0.75;
+  /* Deja espacio para la barra flotante de pedido en móvil. */
+  padding-bottom: 96px;
+}

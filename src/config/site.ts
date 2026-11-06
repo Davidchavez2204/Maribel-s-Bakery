@@ -1,0 +1,25 @@
+/**
+ * Configuración central del negocio.
+ * Todo dato que la clienta pueda querer cambiar vive aquí (o en src/data/productos.ts),
+ * nunca repartido por los componentes.
+ */
+export const SITE = {
+  nombre: "Maribel's Bakery",
+  titulo: "Maribel's Bakery — Repostería casera",
+  descripcion:
+    "Postres de primera calidad, al alcance de tu mano. Pasteles, pays, cupcakes y brownies por encargo. Haz tu pedido y confírmalo por WhatsApp.",
+  tagline: "Postres hechos con amor, para cada ocasión.",
+  /** URL pública; se define en Netlify con NEXT_PUBLIC_SITE_URL. */
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://maribels-bakery.netlify.app").replace(/\/$/, ""),
+
+  /** Número local (9 dígitos). El prefijo de país se agrega al armar el enlace. */
+  whatsapp: "922965377",
+  codigoPais: "51",
+  /** Formato para mostrar en pantalla. */
+  telefonoVisible: "922 965 377",
+
+  direccion: "Av. Simón Bolívar 965, Depto. 1313",
+
+  /** Si es false, los precios de la carta muestran «Consultar». */
+  mostrarPrecios: true,
+} as const;

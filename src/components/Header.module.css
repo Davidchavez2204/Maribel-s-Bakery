@@ -1,0 +1,61 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 12px 28px;
+  flex-wrap: wrap;
+  padding-block: 16px;
+}
+
+.brandLink { margin-right: auto; text-decoration: none; }
+
+.nav {
+  display: flex;
+  gap: 24px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.nav a { color: var(--color-text); text-decoration: none; }
+.nav a:hover { color: var(--color-accent-700); }
+
+.cartBtn { gap: 10px; padding: 10px 18px; font-size: 15px; }
+
+.badge {
+  min-width: 22px;
+  height: 22px;
+  padding-inline: 5px;
+  border-radius: 11px;
+  border: 1px solid var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--color-accent-800);
+  transition: transform 0.25s var(--ease-spring);
+}
+
+/* Móvil: la navegación baja a su propia fila, a ancho completo, para no apretar la marca. */
+@media (max-width: 560px) {
+  .inner { padding-block: 12px; }
+  .nav { order: 3; width: 100%; justify-content: space-between; gap: 12px; font-size: 14px; }
+  .cartBtn { padding: 8px 12px; }
+}
+
+/* Teléfonos: solo ícono + contador; el texto sigue disponible para lectores de pantalla. */
+@media (max-width: 440px) {
+  .brandLink :global(span) { font-size: 26px; }
+  .brandLink :global(span span:last-child) { font-size: 19px; }
+  .cartLabel {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap;
+  }
+}

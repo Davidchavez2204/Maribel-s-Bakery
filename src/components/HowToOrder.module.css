@@ -1,0 +1,43 @@
+.section {
+  background: var(--color-neutral-900);
+  color: var(--color-bg);
+  scroll-margin-top: 70px;
+}
+
+.inner { display: flex; flex-direction: column; gap: 48px; padding-block: 88px; }
+.head { display: flex; flex-direction: column; gap: 12px; }
+.kicker { color: var(--color-accent-300); }
+.h2 { font-size: clamp(40px, 4.5vw, 58px); line-height: 1; color: var(--color-bg); }
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  /* Separadores verticales: se dibujan con gap + fondo, así funcionan en cualquier
+     número de columnas (si el grid pasa a 1 columna, se vuelven horizontales). */
+  gap: 1px;
+  background: color-mix(in srgb, var(--color-accent) 45%, transparent);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 8px 32px;
+  background: var(--color-neutral-900);
+}
+.step:first-child { padding-left: 0; }
+.step:last-child { padding-right: 0; }
+
+.num { font-family: var(--font-heading); font-size: 72px; line-height: 1; color: var(--color-accent); }
+.title { font-size: 28px; line-height: 1.1; }
+.text { font-size: 16px; line-height: 1.6; color: var(--color-neutral-200); }
+
+@media (max-width: 860px) {
+  .step, .step:first-child, .step:last-child { padding: 28px 0; }
+  .step:first-child { padding-top: 0; }
+  .step:last-child { padding-bottom: 0; }
+  .inner { padding-block: 64px; }
+}
