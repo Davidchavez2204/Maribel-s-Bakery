@@ -180,6 +180,23 @@ a { color: var(--accent-text); text-underline-offset: 3px; }
 .input[aria-invalid="true"] { border-bottom: 2px solid var(--accent-text); padding-bottom: 7px; }
 textarea.input { min-height: 64px; resize: vertical; line-height: 1.5; }
 
+/* ═══ Sello que vuela al carrito (lib/flyToCart.ts) ═══ */
+.fly-dot {
+  position: fixed;
+  z-index: var(--z-toast);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1;
+  box-shadow: var(--shadow-md), inset 0 0 0 2px var(--btn-bg), inset 0 0 0 3px var(--miel);
+  pointer-events: none;
+}
+
 /* ═══ Aparición al hacer scroll (solo con JS y sin reduced-motion) ═══ */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
   [data-reveal] {

@@ -1,13 +1,14 @@
 "use client";
 
 import { Minus, Plus } from "lucide-react";
+import type { MouseEvent } from "react";
 import styles from "./Stepper.module.css";
 
 interface StepperProps {
   qty: number;
   label: string;
-  onDec: () => void;
-  onInc: () => void;
+  onDec: (e: MouseEvent<HTMLButtonElement>) => void;
+  onInc: (e: MouseEvent<HTMLButtonElement>) => void;
   size?: "md" | "sm";
 }
 
@@ -19,7 +20,8 @@ export function Stepper({ qty, label, onDec, onInc, size = "md" }: StepperProps)
       <button type="button" onClick={onDec} aria-label={`Quitar uno de ${label}`}>
         <Minus size={icon} strokeWidth={1.6} aria-hidden="true" />
       </button>
-      <span className="tnum" aria-live="polite">{qty}</span>
+      {/* key: el número «salta» cada vez que cambia. */}
+      <span key={qty} className={`tnum ${styles.qty}`} aria-live="polite">{qty}</span>
       <button type="button" onClick={onInc} aria-label={`Agregar uno de ${label}`}>
         <Plus size={icon} strokeWidth={1.6} aria-hidden="true" />
       </button>

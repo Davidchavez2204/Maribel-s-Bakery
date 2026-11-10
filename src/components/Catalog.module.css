@@ -40,9 +40,10 @@
   font-size: 14px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.15s ease;
 }
 .chip:hover { border-color: var(--accent-line); }
+.chip:active { transform: scale(0.96); }
 .chip[aria-pressed="true"] { background: var(--btn-bg); border-color: var(--btn-bg); color: var(--btn-text); }
 
 .count { flex: none; font-size: 14px; color: var(--text-muted); }
@@ -60,11 +61,31 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  animation: card-in 0.5s var(--ease-out) both;
+}
+
+/* Al cambiar de categoría, la grilla nueva entra con un fundido escalonado (sin JS). */
+@media (prefers-reduced-motion: no-preference) {
+  .card { animation: card-in 0.5s var(--ease-out) both; }
+
+  /* Navegadores con scroll-driven animations: cada tarjeta sube al entrar en pantalla.
+     Con view() no hace falta IntersectionObserver y funciona aunque la tarjeta se remonte. */
+  @supports (animation-timeline: view()) {
+    .card {
+      animation: card-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+    .grid { animation: grid-in 0.45s var(--ease-out) both; }
+  }
 }
 @keyframes card-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes card-rise { from { opacity: 0; transform: translateY(48px) scale(0.97); } }
+@keyframes grid-in { from { opacity: 0; } }
 
-.media { position: relative; }
+.media { position: relative; transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out); border-radius: var(--radius); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card:hover .media { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+}
 
 /* Zoom suave de la foto al pasar el mouse (solo en dispositivos con hover). */
 @media (hover: hover) {

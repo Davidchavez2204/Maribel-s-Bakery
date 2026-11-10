@@ -1,4 +1,4 @@
-/* El hero es oscuro en ambos temas (foto + degradado Cacao): sus colores son fijos de marca,
+/* El hero es oscuro en ambos temas (foto + degradado Cacao): usa colores fijos de marca,
    no los tokens semánticos, para que el contraste no dependa del modo claro/oscuro. */
 .hero {
   --hero-ink: var(--harina);
@@ -10,24 +10,27 @@
   overflow: hidden;
   display: flex;
   align-items: center;
-  /* Ocupa la pantalla bajo el header, con tope para monitores muy altos. */
   min-height: min(calc(100dvh - var(--header-h) - 36px), 820px);
   color: var(--hero-ink);
   background: var(--cacao);
 }
 
-/* ── Fondo ── */
+/* ═══ Fondo ═══ */
 .bg { position: absolute; inset: 0; z-index: -1; }
 
-.photo {
-  object-fit: cover;
-  /* Leve acercamiento al cargar: da vida a la foto sin distraer. */
-  animation: settle 1.8s var(--ease-out) both;
+/* Capa de la foto: algo más grande que el hero para que el parallax nunca muestre bordes. */
+.layer {
+  --px: 0;
+  --py: 0;
+  position: absolute;
+  inset: -6%;
+  transform: translate3d(calc(var(--px) * -26px), calc(var(--py) * -18px), 0);
+  transition: transform 0.9s var(--ease-out);
+  will-change: transform;
 }
-@keyframes settle { from { transform: scale(1.06); } to { transform: scale(1); } }
 
-/* Degradado: sólido a la izquierda (donde va el texto) y se abre hacia la foto.
-   Una segunda capa oscurece la base para que el borde inferior no corte en seco. */
+.photo { object-fit: cover; }
+
 .overlay {
   position: absolute;
   inset: 0;
@@ -35,25 +38,23 @@
     linear-gradient(
       90deg,
       hsl(var(--hero-base) / 0.94) 0%,
-      hsl(var(--hero-base) / 0.86) 32%,
-      hsl(var(--hero-base) / 0.45) 62%,
-      hsl(var(--hero-base) / 0.1) 100%
+      hsl(var(--hero-base) / 0.84) 32%,
+      hsl(var(--hero-base) / 0.4) 62%,
+      hsl(var(--hero-base) / 0.08) 100%
     ),
-    linear-gradient(0deg, hsl(var(--hero-base) / 0.55) 0%, transparent 35%);
+    linear-gradient(0deg, hsl(var(--hero-base) / 0.6) 0%, transparent 38%);
 }
 
-/* Sin foto el sello ya está de marca de agua: no se repite. */
-.noPhoto .seal { display: none; }
-
-/* Sin foto: luz cálida de horno y el sello gigante como marca de agua. */
+/* Sin foto: luz cálida y el sello como marca de agua. */
 .noPhoto .overlay {
   background:
     radial-gradient(70% 90% at 78% 40%, color-mix(in srgb, var(--caramelo) 34%, transparent), transparent 70%),
     radial-gradient(50% 60% at 10% 100%, color-mix(in srgb, var(--canela) 30%, transparent), transparent 70%);
 }
+.noPhoto .seal { display: none; }
 .watermark {
   position: absolute;
-  right: -6%;
+  right: 0;
   top: 50%;
   width: min(62vw, 760px);
   height: auto;
@@ -62,7 +63,21 @@
   opacity: 0.1;
 }
 
-/* ── Contenido ── */
+/* Destellos: puntos de luz desenfocados que suben lentamente (ambiente de cocina). */
+.glints { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.glints span {
+  position: absolute;
+  bottom: -40px;
+  left: calc(38% + var(--i) * 8.5%);
+  width: calc(10px + var(--i) * 3px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--miel) 85%, transparent), transparent 70%);
+  opacity: 0;
+  filter: blur(1px);
+}
+
+/* ═══ Contenido ═══ */
 .inner {
   position: relative;
   display: grid;
@@ -74,35 +89,30 @@
 
 .text { display: flex; flex-direction: column; gap: 24px; max-width: 780px; }
 
-.kicker {
-  font-size: 13px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--hero-accent);
-}
+.kicker { font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--hero-accent); }
 
 .title {
+  display: flex;
+  flex-direction: column;
   font-size: clamp(44px, 5.4vw, 76px);
   line-height: 1.04;
   letter-spacing: -0.01em;
   color: var(--hero-ink);
   text-shadow: 0 2px 24px hsl(var(--hero-base) / 0.35);
 }
-.title em { color: var(--hero-accent); display: inline-block; padding-bottom: 0.06em; }
+/* Cada línea es una «ventana»: el texto sube desde abajo de su propia línea. */
+.line { display: block; overflow: hidden; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+.line > * { display: inline-block; }
+.title em { color: var(--hero-accent); }
 
-.lead {
-  font-size: 18px;
-  line-height: 1.7;
-  max-width: 46ch;
-  color: color-mix(in srgb, var(--hero-ink) 86%, transparent);
-  text-wrap: pretty;
-}
+.lead { font-size: 18px; line-height: 1.7; max-width: 46ch; color: color-mix(in srgb, var(--hero-ink) 86%, transparent); text-wrap: pretty; }
 
 .ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
 
-/* Botones del hero: invertidos respecto al resto de la página porque el fondo es oscuro. */
 .ctaPrimary { background: var(--hero-ink); color: var(--cacao); }
 .ctaPrimary:hover { background: var(--masa); color: var(--cacao); }
+.arrow { transition: transform 0.35s var(--ease-spring); }
+.ctaPrimary:hover .arrow { transform: translateY(3px); }
 .ctaGhost {
   color: var(--hero-ink);
   border-color: color-mix(in srgb, var(--hero-ink) 55%, transparent);
@@ -120,26 +130,71 @@
   transform: rotate(-9deg);
   filter: drop-shadow(0 4px 16px hsl(var(--hero-base) / 0.5));
 }
-@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
-  .seal { animation: stamp 0.9s var(--ease-spring) 0.6s both; }
+
+/* ═══ Movimiento (solo si el usuario no pidió reducirlo) ═══ */
+@media (prefers-reduced-motion: no-preference) {
+  /* Entrada de la foto: un leve acercamiento al cargar. */
+  .photo { animation: settle 2s var(--ease-out) both; }
+
+  /* Titular línea por línea; el resto aparece después. */
+  .line > * { animation: line-up 0.95s var(--ease-out) var(--d, 0ms) both; }
+  .in { animation: fade-up 0.8s var(--ease-out) var(--d, 0ms) both; }
+
+  /* El sello se estampa y, al bajar, gira como si rodara. */
+  .seal { animation: stamp 0.9s var(--ease-spring) 0.75s both; }
+
+  .glints span {
+    animation: rise calc(11s + var(--i) * 1.7s) linear calc(var(--i) * -2.3s) infinite;
+  }
+
+  /* Scroll-driven (Chrome/Edge/Safari recientes; en el resto simplemente no se mueve). */
+  @supports (animation-timeline: scroll()) {
+    .bg {
+      animation: drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+    .sealSpin {
+      animation: spin linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+    .text {
+      animation: lift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+  }
 }
+
+@keyframes settle { from { transform: scale(1.08); } to { transform: scale(1); } }
+@keyframes line-up { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 @keyframes stamp {
   from { opacity: 0; transform: rotate(-30deg) scale(1.5); }
   to { opacity: 1; transform: rotate(-9deg) scale(1); }
 }
+@keyframes rise {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.5; }
+  100% { transform: translate3d(calc(var(--i) * 6px - 18px), -78vh, 0); opacity: 0; }
+}
+@keyframes drift { to { transform: translateY(16%); } }
+@keyframes spin { to { transform: rotate(120deg); } }
+@keyframes lift { to { transform: translateY(-60px); opacity: 0.2; } }
 
-/* ── Móvil: la foto arriba se ve, el texto se apoya en un degradado de abajo hacia arriba. ── */
+/* ═══ Móvil: degradado de abajo hacia arriba, el texto apoyado en la parte oscura. ═══ */
 @media (max-width: 760px) {
   .hero { align-items: flex-end; min-height: min(calc(100dvh - var(--header-h) - 34px), 720px); }
   .overlay {
-    background:
-      linear-gradient(
-        0deg,
-        hsl(var(--hero-base) / 0.97) 0%,
-        hsl(var(--hero-base) / 0.9) 55%,
-        hsl(var(--hero-base) / 0.6) 80%,
-        hsl(var(--hero-base) / 0.3) 100%
-      );
+    background: linear-gradient(
+      0deg,
+      hsl(var(--hero-base) / 0.97) 0%,
+      hsl(var(--hero-base) / 0.9) 55%,
+      hsl(var(--hero-base) / 0.6) 80%,
+      hsl(var(--hero-base) / 0.3) 100%
+    );
   }
   .inner { grid-template-columns: 1fr; padding-block: 120px 40px; }
   .seal { position: absolute; top: 24px; right: var(--gutter); width: 96px; }
@@ -147,4 +202,5 @@
   .lead { font-size: 16px; }
   .ctas > a { flex: 1 1 100%; }
   .watermark { right: -30%; top: 22%; width: 120vw; }
+  .glints span { left: calc(10% + var(--i) * 12%); }
 }

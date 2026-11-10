@@ -18,7 +18,7 @@ export function About() {
       </p>
 
       {/* La tarjeta de agradecimiento que va dentro de cada caja (aplicación del manual). */}
-      <figure className={styles.card} {...reveal(160)}>
+      <figure className={styles.card}>
         <Monograma size={44} className={styles.mono} />
         <blockquote className={styles.quote}>
           <p>{SITE.gracias}</p>

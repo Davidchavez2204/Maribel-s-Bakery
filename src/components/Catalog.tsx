@@ -5,6 +5,7 @@ import { SITE } from "@/config/site";
 import { useOrder } from "@/context/OrderContext";
 import { CATEGORIAS, PRODUCTOS, type Producto } from "@/data/productos";
 import { reveal } from "@/lib/reveal";
+import { flyToCart } from "@/lib/flyToCart";
 import { formatMoney, WA_CATERING } from "@/lib/whatsapp";
 import { Plate } from "./Plate";
 import { Stepper } from "./Stepper";
@@ -20,13 +21,26 @@ function CardAction({ p, full }: { p: Producto; full?: boolean }) {
   const { cart, add, setQty } = useOrder();
   const qty = cart[p.id] ?? 0;
   if (qty > 0) {
-    return <Stepper qty={qty} label={p.nombre} onDec={() => setQty(p.id, qty - 1)} onInc={() => add(p.id)} />;
+    return (
+      <Stepper
+        qty={qty}
+        label={p.nombre}
+        onDec={() => setQty(p.id, qty - 1)}
+        onInc={(e) => {
+          add(p.id);
+          flyToCart(e.currentTarget);
+        }}
+      />
+    );
   }
   return (
     <button
       type="button"
       className={`btn btn-outline btn-sm ${full ? styles.actionFull : ""}`}
-      onClick={() => add(p.id)}
+      onClick={(e) => {
+        add(p.id);
+        flyToCart(e.currentTarget);
+      }}
       aria-label={`Separar ${p.nombre}`}
     >
       <Plus size={16} strokeWidth={1.5} aria-hidden="true" />

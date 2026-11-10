@@ -25,3 +25,8 @@
 
 .sm button { width: 36px; height: 36px; }
 .sm span { min-width: 24px; font-size: 14px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .qty { animation: qty-pop 0.32s var(--ease-spring); }
+}
+@keyframes qty-pop { from { transform: scale(1.45); } to { transform: scale(1); } }

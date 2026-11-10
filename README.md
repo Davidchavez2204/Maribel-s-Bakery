@@ -65,9 +65,23 @@ src/
 - Tono: primera persona de Maribel, tuteo, cálido y sin sonar a empresa.
 - Modo oscuro automático (`prefers-color-scheme`): fondo Cacao y logo en Miel, como indica el manual para fondos oscuros.
 
+## Animaciones
+
+Todas se desactivan si el usuario tiene activado «reducir movimiento» en su sistema.
+
+| Dónde | Qué hace | Cómo |
+|---|---|---|
+| Hero | Titular línea por línea, foto con leve acercamiento, sello que se estampa | CSS `@keyframes` |
+| Hero | La foto se mueve con el mouse | `HeroParallax.tsx` (variables CSS en `requestAnimationFrame`, sin re-render) |
+| Hero, header | La foto se desplaza y el sello gira al bajar; el header gana sombra | CSS scroll-driven (`animation-timeline: scroll()`) |
+| Carta, pasos, tarjeta | Las tarjetas suben al entrar; la línea de pasos se dibuja; la tarjeta de agradecimiento «cae» | CSS scroll-driven (`animation-timeline: view()`) |
+| Al separar | Un sello vuela del botón al carrito; cantidades y total «saltan» | `lib/flyToCart.ts` (Web Animations API) |
+
+Las animaciones ligadas al scroll son mejora progresiva: en navegadores sin soporte, el contenido simplemente aparece sin movimiento.
+
 ## Pendientes con la clienta
 
 - Carta y precios reales (los actuales son de ejemplo).
-- Fotos reales.
+- Fotos reales. **La imagen del hero (`public/fotos/hero.webp`) es una ilustración provisional**: reemplazarla por una foto real con el mismo nombre.
 - Zonas de delivery y horario de atención.
 - Dominio final y `NEXT_PUBLIC_SITE_URL`.

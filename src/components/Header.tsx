@@ -49,7 +49,7 @@ export function Header() {
           >
             <ShoppingBag size={18} strokeWidth={1.5} aria-hidden="true" />
             <span className={styles.cartLabel}>Mi pedido</span>
-            <span className={`${styles.badge} tnum`} data-bump={bump || undefined} data-empty={count === 0 || undefined}>
+            <span className={`${styles.badge} tnum`} data-cart-target data-bump={bump || undefined} data-empty={count === 0 || undefined}>
               {count}
             </span>
             <span className="sr-only">, {count === 1 ? "1 producto" : `${count} productos`}</span>

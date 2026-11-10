@@ -53,7 +53,8 @@ export const PRODUCTOS_POR_ID: ReadonlyMap<string, Producto> = new Map(PRODUCTOS
 export const FOTOS = {
   /** Foto horizontal a sangre completa (~2000×1300, WebP < 300 KB), p. ej. "/fotos/hero.webp".
    *  El texto va a la izquierda: conviene que el postre esté a la derecha del encuadre. */
-  hero: undefined as string | undefined,
+  // ⚠️ PROVISIONAL: ilustración generada para maquetar. Reemplazar por una foto real de Maribel.
+  hero: "/fotos/hero.webp" as string | undefined,
   /** Qué parte de la foto se prioriza al recortar (CSS object-position). */
-  heroPosicion: "70% 50%",
+  heroPosicion: "78% 60%",
 };

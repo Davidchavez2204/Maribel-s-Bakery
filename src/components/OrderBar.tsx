@@ -15,7 +15,10 @@ export function OrderBar() {
       <button type="button" className={styles.barBtn} onClick={openDrawer} aria-controls="pedido-drawer">
         <ShoppingBag size={18} strokeWidth={1.5} aria-hidden="true" />
         <span className={styles.barCount}>{count === 1 ? "1 postre" : `${count} postres`}</span>
-        <span className={`${styles.barTotal} tnum`}>{formatMoney(totalReferencial(lineas))}</span>
+        {/* key: el total «salta» cada vez que cambia. */}
+        <span key={totalReferencial(lineas)} className={`${styles.barTotal} tnum`}>
+          {formatMoney(totalReferencial(lineas))}
+        </span>
         <span className={styles.barCta}>Ver mi pedido</span>
       </button>
     </div>

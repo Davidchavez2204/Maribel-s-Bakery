@@ -61,3 +61,15 @@
   .cartLabel { display: none; }
   .cart { padding-inline: 12px; }
 }
+
+/* Al bajar, el header gana sombra: indica que flota sobre el contenido. Solo CSS (scroll-driven). */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .header {
+      animation: header-lift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 140px;
+    }
+  }
+}
+@keyframes header-lift { to { box-shadow: var(--shadow-md); border-bottom-color: transparent; } }

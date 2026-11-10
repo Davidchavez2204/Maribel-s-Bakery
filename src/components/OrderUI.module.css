@@ -30,7 +30,13 @@
 }
 .barBtn:active { transform: scale(0.98); }
 .barBtn svg { color: var(--btn-text); }
-.barTotal { font-family: var(--font-display); font-size: 22px; line-height: 1; }
+.barTotal { font-family: var(--font-display); font-size: 22px; line-height: 1; display: inline-block; }
+@media (prefers-reduced-motion: no-preference) {
+  .barTotal { animation: total-pop 0.4s var(--ease-spring); }
+  .line { animation: line-in 0.35s var(--ease-out) both; }
+}
+@keyframes total-pop { from { transform: translateY(-6px) scale(1.2); opacity: 0.4; } to { transform: none; opacity: 1; } }
+@keyframes line-in { from { opacity: 0; transform: translateX(16px); } }
 .barCta {
   padding: 9px 16px;
   border-radius: var(--radius-pill);

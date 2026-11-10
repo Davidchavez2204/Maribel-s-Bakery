@@ -24,12 +24,33 @@
   content: "";
   position: absolute;
   left: 32px;
-  right: 32px;
+  /* Termina en el centro del último número: ancho de una columna (3 columnas, 2 gaps de 40px) menos 32px. */
+  right: calc((100% - 80px) / 3 - 32px);
   top: 32px;
   height: 1px;
   background: var(--accent-line);
   opacity: 0.6;
+  transform-origin: left center;
 }
+
+/* La línea se «dibuja» a medida que bajas: cuenta el recorrido de los 3 pasos. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .steps::before {
+      animation: draw linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 40%;
+    }
+    .num {
+      animation: num-pop linear both;
+      animation-timeline: view();
+      animation-range: entry 40% entry 100%;
+    }
+  }
+}
+@keyframes draw { from { transform: scaleX(0); } }
+@keyframes draw-y { from { transform: scaleY(0); } }
+@keyframes num-pop { from { transform: scale(0.4) rotate(-40deg); opacity: 0; } }
 
 .step { position: relative; display: flex; flex-direction: column; gap: 12px; padding-right: 16px; }
 
@@ -54,7 +75,7 @@
 /* Móvil: la línea de tiempo pasa a vertical. */
 @media (max-width: 760px) {
   .steps { grid-template-columns: 1fr; gap: 32px; }
-  .steps::before { left: 32px; right: auto; top: 32px; bottom: 32px; width: 1px; height: auto; }
+  .steps::before { left: 32px; right: auto; top: 32px; bottom: 32px; width: 1px; height: auto; transform-origin: center top; animation-name: draw-y; }
   .step { display: grid; grid-template-columns: 64px 1fr; column-gap: 20px; row-gap: 4px; padding-right: 0; }
   .num { grid-row: span 2; margin-bottom: 0; }
   .title { align-self: end; }
