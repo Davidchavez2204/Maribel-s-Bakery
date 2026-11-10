@@ -51,5 +51,9 @@ export const PRODUCTOS_POR_ID: ReadonlyMap<string, Producto> = new Map(PRODUCTOS
 
 /** Fotos generales (opcional). Sube los archivos a /public/fotos/ y coloca la ruta. */
 export const FOTOS = {
-  hero: undefined as string | undefined, // 4:5, p. ej. "/fotos/hero.webp"
+  /** Foto horizontal a sangre completa (~2000×1300, WebP < 300 KB), p. ej. "/fotos/hero.webp".
+   *  El texto va a la izquierda: conviene que el postre esté a la derecha del encuadre. */
+  hero: undefined as string | undefined,
+  /** Qué parte de la foto se prioriza al recortar (CSS object-position). */
+  heroPosicion: "70% 50%",
 };
