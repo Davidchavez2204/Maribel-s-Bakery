@@ -1,10 +1,11 @@
 "use client";
 
-import { Check, MessageCircle, ShieldCheck, ShoppingBag, X } from "lucide-react";
+import { MessageCircle, ShieldCheck, ShoppingBag, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { SITE } from "@/config/site";
 import { useOrder } from "@/context/OrderContext";
 import { formatMoney, hayCotizacion, mensajePedido, totalReferencial, waUrl, type Entrega } from "@/lib/whatsapp";
+import { Monograma, Sello } from "./Logo";
 import { Stepper } from "./Stepper";
 import styles from "./OrderUI.module.css";
 
@@ -109,30 +110,31 @@ export function OrderDrawer() {
 
         {showSent && (
           <div className={styles.state}>
-            <div className={styles.checkCircle}>
-              <Check size={34} strokeWidth={1.5} color="var(--color-accent-700)" aria-hidden="true" />
-            </div>
-            <p className={styles.stateTitle}>Tu pedido está listo en WhatsApp</p>
-            <p className={styles.stateText}>
-              Solo presiona <em>enviar</em> en WhatsApp. Maribel te responderá para confirmar el total y la entrega.
-            </p>
+            {/* La tarjeta de agradecimiento de cada caja, ahora con tu nombre (tono de marca). */}
+            <figure className={styles.thanks}>
+              <Monograma size={40} className={styles.thanksMono} />
+              <p className={styles.thanksTitle}>¡Gracias, {o.nombre.trim().split(/\s+/)[0]}!</p>
+              <p className={styles.stateText}>
+                Tu pedido ya está escrito en WhatsApp. Solo presiona <em>enviar</em> y te confirmo el total y la entrega.
+              </p>
+              <figcaption className={styles.thanksSign}>Maribel</figcaption>
+            </figure>
             <a href={waPedido} target="_blank" rel="noopener noreferrer" className={styles.retry}>
-              ¿No se abrió? Abrir WhatsApp de nuevo
+              ¿No se abrió WhatsApp? Ábrelo de nuevo
             </a>
             <div className={styles.stateActions}>
-              <button type="button" className="btn btn-secondary" style={{ padding: "10px 18px" }} onClick={() => o.setSent(false)}>
+              <button type="button" className="btn btn-outline" onClick={() => o.setSent(false)}>
                 Volver al pedido
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                style={{ padding: "10px 18px" }}
                 onClick={() => {
                   o.reset();
                   closeDrawer();
                 }}
               >
-                Empezar uno nuevo
+                Empezar otro pedido
               </button>
             </div>
           </div>
@@ -140,11 +142,11 @@ export function OrderDrawer() {
 
         {showEmpty && (
           <div className={styles.state}>
-            <ShoppingBag size={44} strokeWidth={1.1} color="var(--color-accent)" aria-hidden="true" />
-            <p className={styles.emptyTitle}>Aún no separas nada</p>
-            <p className={styles.stateText}>Elige tus postres en la carta y aparecerán aquí.</p>
-            <a href="#productos" className="btn btn-primary" style={{ padding: "10px 20px", marginTop: 6 }} onClick={closeDrawer}>
-              Ver productos
+            <ShoppingBag size={40} strokeWidth={1.1} color="var(--accent-line)" aria-hidden="true" />
+            <p className={styles.emptyTitle}>Tu pedido está vacío</p>
+            <p className={styles.stateText}>Presiona «Separar» en los postres de la carta y aparecerán aquí.</p>
+            <a href="#productos" className="btn btn-primary" onClick={closeDrawer}>
+              Ver la carta
             </a>
           </div>
         )}
@@ -170,19 +172,22 @@ export function OrderDrawer() {
                 ))}
               </ul>
 
-              <fieldset className={styles.form}>
-                <legend className={styles.legend}>Tus datos</legend>
+              {/* «Etiqueta de caja» del manual: sello a un lado y líneas para escribir. */}
+              <fieldset className={styles.label}>
+                <legend className={styles.legend}>Datos para tu caja</legend>
+                <Sello id="sello-etiqueta" size={72} className={styles.labelSello} />
 
-                <label className={styles.field}>
-                  Nombre
+                <div className={styles.field}>
+                  <label htmlFor="pedido-nombre">¿A nombre de quién?</label>
                   <input
+                    id="pedido-nombre"
                     ref={nombreRef}
                     className="input"
                     type="text"
                     name="nombre"
                     autoComplete="name"
+                    placeholder="Tu nombre"
                     maxLength={80}
-                    placeholder="¿A nombre de quién?"
                     value={o.nombre}
                     aria-invalid={nombreError}
                     aria-describedby={nombreError ? "nombre-error" : undefined}
@@ -194,25 +199,28 @@ export function OrderDrawer() {
                   />
                   {nombreError && (
                     <span id="nombre-error" className={styles.error} role="alert">
-                      Escribe tu nombre para que Maribel sepa de quién es el pedido.
+                      Escribe tu nombre para saber de quién es el pedido.
                     </span>
                   )}
-                </label>
+                </div>
 
-                <label className={styles.field}>
-                  ¿Para qué fecha?
+                <div className={styles.field}>
+                  <label htmlFor="pedido-fecha">¿Para cuándo lo necesitas?</label>
                   <input
+                    id="pedido-fecha"
                     className="input"
                     type="date"
                     name="fecha"
                     min={hoyISO()}
                     value={o.fecha}
+                    aria-describedby="fecha-ayuda"
                     onChange={(e) => o.setField("fecha", e.target.value)}
                   />
-                </label>
+                  <span id="fecha-ayuda" className={styles.hint}>Así lo preparo con tiempo.</span>
+                </div>
 
                 <div className={styles.field}>
-                  <span id="entrega-label">Entrega</span>
+                  <span id="entrega-label">¿Cómo lo recibes?</span>
                   <div className={styles.segmented} role="radiogroup" aria-labelledby="entrega-label">
                     {ENTREGAS.map((en) => (
                       <button
@@ -228,21 +236,24 @@ export function OrderDrawer() {
                     ))}
                   </div>
                   <span className={styles.hint}>
-                    {o.entrega === "recojo" ? `Recojo en ${SITE.direccion}` : "El costo del delivery se coordina por WhatsApp."}
+                    {o.entrega === "recojo" ? `Recojo en ${SITE.direccion}.` : "El costo del delivery lo coordinamos por WhatsApp."}
                   </span>
                 </div>
 
-                <label className={styles.field}>
-                  Notas (opcional)
+                <div className={styles.field}>
+                  <label htmlFor="pedido-notas">¿Algo que deba saber? (opcional)</label>
                   <textarea
+                    id="pedido-notas"
                     className="input"
                     name="notas"
                     maxLength={500}
-                    placeholder="Sabor, dedicatoria, alergias…"
+                    rows={2}
+                    aria-describedby="notas-ayuda"
                     value={o.notas}
                     onChange={(e) => o.setField("notas", e.target.value)}
                   />
-                </label>
+                  <span id="notas-ayuda" className={styles.hint}>Sabor, dedicatoria o alergias.</span>
+                </div>
               </fieldset>
             </div>
 
@@ -251,7 +262,7 @@ export function OrderDrawer() {
                 <span>Total referencial</span>
                 <span className={`${styles.total} tnum`}>{formatMoney(total)}</span>
               </div>
-              {cotizar && <p className={styles.cotizar}>+ catering a cotizar</p>}
+              {cotizar && <p className={styles.cotizar}>+ mesa de postres a cotizar</p>}
               <a
                 href={waPedido}
                 target="_blank"
@@ -260,11 +271,11 @@ export function OrderDrawer() {
                 onClick={onEnviar}
               >
                 <MessageCircle size={18} strokeWidth={1.5} aria-hidden="true" />
-                Enviar pedido por WhatsApp
+                Enviar por WhatsApp
               </a>
               <p className={styles.trust}>
-                <ShieldCheck size={16} strokeWidth={1.5} color="var(--color-accent-700)" aria-hidden="true" />
-                <span>No se cobra nada en esta página. El pago y la entrega se coordinan directamente con Maribel.</span>
+                <ShieldCheck size={16} strokeWidth={1.5} color="var(--accent-text)" aria-hidden="true" />
+                <span>Aquí no se cobra nada. El pago y la entrega los coordinamos por WhatsApp.</span>
               </p>
             </div>
           </>

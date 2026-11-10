@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#f3f2f2"/>
-  <rect x="5" y="5" width="54" height="54" rx="8" fill="none" stroke="#b68235" stroke-width="1.5"/>
-  <text x="32" y="44" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#201f1d">M<tspan font-style="italic" font-size="22" fill="#7d5411">b</tspan></text>
+  <circle cx="32" cy="32" r="31" fill="#fff3e4"/>
+  <circle cx="32" cy="32" r="29" fill="none" stroke="#7d5411" stroke-width="1.6"/>
+  <circle cx="32" cy="32" r="25.5" fill="none" stroke="#7d5411" stroke-width="0.6"/>
+  <text x="32" y="44" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-style="italic" font-size="38" fill="#7d5411">M</text>
 </svg>

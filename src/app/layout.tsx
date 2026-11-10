@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 // build determinista y mejor privacidad. Solo el subconjunto latino y los pesos usados.
 import "@fontsource/cormorant-garamond/latin-400.css";
 import "@fontsource/cormorant-garamond/latin-400-italic.css";
-import "@fontsource/cormorant-garamond/latin-600.css";
+import "@fontsource/cormorant-garamond/latin-500.css"; // el logo usa peso 500
 import "@fontsource/lora/latin-400.css";
 import "@fontsource/lora/latin-400-italic.css";
 import "./globals.css";
@@ -29,7 +29,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f3f2f2",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3f2f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#211f1f" },
+  ],
   width: "device-width",
   initialScale: 1,
 };

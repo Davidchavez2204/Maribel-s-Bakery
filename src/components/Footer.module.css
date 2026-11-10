@@ -1,29 +1,50 @@
-.footer { border-top: 1px solid var(--color-divider); scroll-margin-top: 70px; }
+.footer { background: var(--inverse-bg); color: var(--inverse-text); }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-  gap: 40px;
-  padding-block: 56px 40px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  padding-block: clamp(56px, 7vw, 88px) 48px;
 }
-.col { display: flex; flex-direction: column; gap: 10px; }
-.tagline { font-style: italic; font-size: 15px; }
+
+.brand { display: flex; flex-direction: column; gap: 20px; }
+.sello { color: var(--inverse-accent); }
+.tagline { font-family: var(--font-display); font-style: italic; font-size: 24px; line-height: 1.25; max-width: 18ch; }
+
+.col { display: flex; flex-direction: column; gap: 8px; }
 .label {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-accent-700);
+  color: var(--inverse-accent);
+  margin-bottom: 6px;
 }
-.phone { font-family: var(--font-heading); font-size: 34px; line-height: 1; text-decoration: none; color: var(--color-text); }
-.phone:hover { color: var(--color-accent-700); }
-.address { font-style: normal; font-size: 16px; line-height: 1.5; }
+.phone { font-family: var(--font-display); font-size: 40px; line-height: 1; color: var(--inverse-text); text-decoration: none; }
+.phone:hover { color: var(--inverse-accent); }
+.small { font-size: 14px; opacity: 0.8; }
+.wa { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 8px; color: var(--inverse-accent); }
+.wa:hover { color: var(--inverse-text); }
+.address { font-style: normal; font-size: 17px; line-height: 1.6; }
 
 .legal {
-  padding-block: 18px 28px;
-  border-top: 1px solid var(--color-divider);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding-block: 20px;
+  border-top: 1px solid color-mix(in srgb, var(--inverse-text) 16%, transparent);
   font-size: 13px;
-  opacity: 0.75;
-  /* Deja espacio para la barra flotante de pedido en móvil. */
-  padding-bottom: 96px;
+  opacity: 0.8;
+  /* Espacio para la barra flotante del pedido. */
+  padding-bottom: 104px;
+}
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: 1fr 1fr; }
+  .brand { grid-column: 1 / -1; flex-direction: row; align-items: center; }
+}
+@media (max-width: 520px) {
+  .grid { grid-template-columns: 1fr; gap: 36px; }
+  .brand { flex-direction: column; align-items: flex-start; }
 }

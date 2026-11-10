@@ -11,7 +11,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PRODUCTOS, PRODUCTOS_POR_ID } from "@/data/productos";
+import { PRODUCTOS, PRODUCTOS_POR_ID, type Filtro } from "@/data/productos";
 import type { Entrega, LineaPedido } from "@/lib/whatsapp";
 
 const STORAGE_KEY = "maribels_pedido_v1";
@@ -102,6 +102,9 @@ interface OrderContextValue extends State {
   reset: () => void;
   openDrawer: () => void;
   closeDrawer: () => void;
+  /** Categoría activa de la carta (compartida entre el header y la carta). */
+  filtro: Filtro;
+  setFiltro: (f: Filtro) => void;
 }
 
 const OrderContext = createContext<OrderContextValue | null>(null);
@@ -112,6 +115,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [bump, setBump] = useState(false);
+  const [filtro, setFiltro] = useState<Filtro>("todos");
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const bumpTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -149,7 +153,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       const p = PRODUCTOS_POR_ID.get(id);
       clearTimeout(toastTimer.current);
       clearTimeout(bumpTimer.current);
-      setToast(`${p?.nombre ?? "Producto"} se agregó a tu pedido`);
+      setToast(`${p?.nombre ?? "Tu postre"} ya está en tu pedido`);
       setBump(true);
       bumpTimer.current = setTimeout(() => setBump(false), 220);
       toastTimer.current = setTimeout(() => setToast(null), 2200);
@@ -174,8 +178,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       reset: () => dispatch({ type: "reset" }),
       openDrawer: () => setOpen(true),
       closeDrawer: () => setOpen(false),
+      filtro,
+      setFiltro,
     };
-  }, [state, open, toast, bump, add, setQty]);
+  }, [state, open, toast, bump, add, setQty, filtro]);
 
   return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>;
 }

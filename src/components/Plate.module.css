@@ -1,26 +1,28 @@
+.plate {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.img {
+  object-fit: cover;
+  transition: transform 0.7s var(--ease-out);
+}
+
 .placeholder {
-  container-type: inline-size;
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   background:
-    radial-gradient(circle at 50% 45%, var(--color-accent-100), transparent 70%),
-    repeating-linear-gradient(45deg, transparent 0 14px, color-mix(in srgb, var(--color-accent) 7%, transparent) 14px 15px),
-    var(--color-surface);
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, color-mix(in srgb, var(--caramelo) 10%, transparent)),
+    var(--surface);
+  transition: transform 0.7s var(--ease-out);
 }
 
 .mark {
-  font-family: var(--font-heading);
-  font-size: clamp(40px, 9cqi, 72px);
-  line-height: 1;
-  color: color-mix(in srgb, var(--color-accent) 55%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
-  border-radius: 50%;
-  width: 2.1em;
-  height: 2.1em;
-  display: grid;
-  place-items: center;
+  width: 34%;
+  height: auto;
+  color: color-mix(in srgb, var(--accent-line) 34%, transparent);
 }
-
-.mark em { font-size: 0.7em; color: color-mix(in srgb, var(--color-accent-700) 60%, transparent); }

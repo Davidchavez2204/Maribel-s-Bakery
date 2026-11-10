@@ -1,5 +1,6 @@
+import { About } from "@/components/About";
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Catalog } from "@/components/Catalog";
-import { Catering } from "@/components/Catering";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
@@ -8,11 +9,10 @@ import { OrderBar } from "@/components/OrderBar";
 import { OrderDrawer } from "@/components/OrderDrawer";
 import { RevealObserver } from "@/components/RevealObserver";
 import { Toast } from "@/components/Toast";
-import { TrustStrip } from "@/components/TrustStrip";
 import { OrderProvider } from "@/context/OrderContext";
 
 /**
- * Página única. Las secciones estáticas (Hero, TrustStrip, HowToOrder, Catering, Footer)
+ * Página única. Las secciones estáticas (AnnouncementBar, Hero, HowToOrder, About, Footer)
  * son Server Components: se pre-renderizan a HTML y no envían JS al navegador.
  * Solo lo interactivo (carta, carrito, panel) es Client Component.
  */
@@ -20,13 +20,13 @@ export default function Home() {
   return (
     <OrderProvider>
       <a href="#productos" className="skip-link">Ir a la carta</a>
+      <AnnouncementBar />
       <Header />
       <main>
         <Hero />
-        <TrustStrip />
         <Catalog />
         <HowToOrder />
-        <Catering />
+        <About />
       </main>
       <Footer />
       <OrderBar />

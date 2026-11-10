@@ -12,9 +12,9 @@ export function waUrl(texto: string): string {
   return `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
 }
 
-export const WA_CONSULTA = waUrl("Hola Maribel's Bakery, quisiera hacer una consulta.");
+export const WA_CONSULTA = waUrl("Hola Maribel, quisiera hacerte una consulta.");
 export const WA_CATERING = waUrl(
-  "Hola Maribel's Bakery, quisiera cotizar una mesa de postres. Fecha: __ · Invitados: __ · Temática: __",
+  "Hola Maribel, quisiera cotizar una mesa de postres.\nFecha: \nInvitados: \nTemática: ",
 );
 
 export type Entrega = "recojo" | "delivery";
@@ -46,14 +46,14 @@ export function hayCotizacion(lineas: readonly LineaPedido[]): boolean {
  */
 export function mensajePedido(lineas: readonly LineaPedido[], datos: DatosPedido): string {
   const total = totalReferencial(lineas);
-  const L: string[] = ["Hola Maribel's Bakery, quisiera separar este pedido:", ""];
+  const L: string[] = ["Hola Maribel, quisiera separar este pedido:", ""];
 
   for (const { producto: p, qty } of lineas) {
     const sub = p.precio === null ? "a cotizar" : formatMoney(p.precio * qty);
-    L.push(`• ${qty} × ${p.nombre} (${p.unidad}) — ${sub}`);
+    L.push(`• ${qty} × ${p.nombre} (${p.unidad}): ${sub}`);
   }
 
-  L.push("", `Total referencial: ${formatMoney(total)}${hayCotizacion(lineas) ? " + catering a cotizar" : ""}`, "");
+  L.push("", `Total referencial: ${formatMoney(total)}${hayCotizacion(lineas) ? " + mesa de postres a cotizar" : ""}`, "");
   L.push(`Nombre: ${datos.nombre.trim()}`);
 
   if (datos.fecha) {

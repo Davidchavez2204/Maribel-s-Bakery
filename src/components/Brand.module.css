@@ -1,5 +1,0 @@
-.brand { display: inline-flex; align-items: baseline; gap: 8px; font-family: var(--font-heading); line-height: 1; }
-.name { font-size: 30px; color: var(--color-text); }
-.sub { font-size: 22px; font-style: italic; color: var(--color-accent-700); }
-.lg .name { font-size: 34px; }
-.lg .sub { font-size: 24px; }

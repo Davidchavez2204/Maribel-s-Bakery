@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import { Monograma } from "./Logo";
 import styles from "./Plate.module.css";
 
 interface PlateProps {
@@ -10,25 +10,20 @@ interface PlateProps {
   sizes: string;
   priority?: boolean;
   className?: string;
-  style?: CSSProperties;
 }
 
 /**
- * Marco de foto «plate» del sistema de diseño.
- * Mientras no haya foto real muestra un placeholder elegante (no una imagen rota).
+ * Marco de foto. Sin foto real muestra un fondo Masa con el monograma de la marca
+ * como marca de agua (uso que el manual permite al monograma), nunca una imagen rota.
  */
-export function Plate({ src, alt, ratio, sizes, priority, className, style }: PlateProps) {
+export function Plate({ src, alt, ratio, sizes, priority, className }: PlateProps) {
   return (
-    <div className={`plate ${className ?? ""}`} style={{ aspectRatio: ratio, ...style }}>
+    <div className={`${styles.plate} ${className ?? ""}`} style={{ aspectRatio: ratio }}>
       {src ? (
-        <Image src={src} alt={alt} fill sizes={sizes} priority={priority} />
+        <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={styles.img} />
       ) : (
         <div className={styles.placeholder} role="img" aria-label={alt}>
-          <span className={styles.mark} aria-hidden="true">
-            <span>
-              M<em>b</em>
-            </span>
-          </span>
+          <Monograma className={styles.mark} size="34%" />
         </div>
       )}
     </div>

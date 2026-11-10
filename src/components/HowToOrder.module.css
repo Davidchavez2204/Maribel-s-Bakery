@@ -1,43 +1,61 @@
-.section {
-  background: var(--color-neutral-900);
-  color: var(--color-bg);
-  scroll-margin-top: 70px;
+.section { background: var(--surface); }
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(36px, 5vw, 64px);
+  padding-block: clamp(64px, 8vw, 104px);
 }
 
-.inner { display: flex; flex-direction: column; gap: 48px; padding-block: 88px; }
-.head { display: flex; flex-direction: column; gap: 12px; }
-.kicker { color: var(--color-accent-300); }
-.h2 { font-size: clamp(40px, 4.5vw, 58px); line-height: 1; color: var(--color-bg); }
+.h2 { font-size: clamp(40px, 4.6vw, 60px); }
+.h2 em { color: var(--accent-text); }
 
 .steps {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-  /* Separadores verticales: se dibujan con gap + fondo, así funcionan en cualquier
-     número de columnas (si el grid pasa a 1 columna, se vuelven horizontales). */
-  gap: 1px;
-  background: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  position: relative;
+}
+/* La línea que une los pasos pasa por el centro de los números. */
+.steps::before {
+  content: "";
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  top: 32px;
+  height: 1px;
+  background: var(--accent-line);
+  opacity: 0.6;
 }
 
-.step {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 8px 32px;
-  background: var(--color-neutral-900);
+.step { position: relative; display: flex; flex-direction: column; gap: 12px; padding-right: 16px; }
+
+.num {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1.5px var(--accent-line), inset 0 0 0 5px var(--surface), inset 0 0 0 6px var(--accent-line);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--accent-text);
+  margin-bottom: 8px;
 }
-.step:first-child { padding-left: 0; }
-.step:last-child { padding-right: 0; }
+.title { font-size: clamp(26px, 2.4vw, 30px); }
+.text { color: var(--text-muted); max-width: 32ch; }
 
-.num { font-family: var(--font-heading); font-size: 72px; line-height: 1; color: var(--color-accent); }
-.title { font-size: 28px; line-height: 1.1; }
-.text { font-size: 16px; line-height: 1.6; color: var(--color-neutral-200); }
-
-@media (max-width: 860px) {
-  .step, .step:first-child, .step:last-child { padding: 28px 0; }
-  .step:first-child { padding-top: 0; }
-  .step:last-child { padding-bottom: 0; }
-  .inner { padding-block: 64px; }
+/* Móvil: la línea de tiempo pasa a vertical. */
+@media (max-width: 760px) {
+  .steps { grid-template-columns: 1fr; gap: 32px; }
+  .steps::before { left: 32px; right: auto; top: 32px; bottom: 32px; width: 1px; height: auto; }
+  .step { display: grid; grid-template-columns: 64px 1fr; column-gap: 20px; row-gap: 4px; padding-right: 0; }
+  .num { grid-row: span 2; margin-bottom: 0; }
+  .title { align-self: end; }
 }

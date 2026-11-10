@@ -1,44 +1,83 @@
-/* ═══ Design tokens — sistema «Classical» (fuente: handoff de diseño) ═══ */
+/* ═════════════════════════════════════════════════════════════
+   Tokens: paleta «de cocina» del manual de marca.
+   Los componentes usan SOLO los tokens semánticos (--bg, --text, --accent-text…),
+   nunca los hex directos: así el modo oscuro es un simple cambio de valores.
+   ═════════════════════════════════════════════════════════════ */
 :root {
-  --color-bg: #f3f2f2;
-  --color-surface: #eae9e9;
-  --color-text: #201f1d;
-  --color-accent: #b68235;
-  --color-divider: color-mix(in srgb, #201f1d 16%, transparent);
+  /* Paleta de marca (valores fijos) */
+  --harina: #f3f2f2;
+  --masa: #fff3e4;
+  --miel: #facb8d;
+  --caramelo: #b68235;
+  --canela: #7d5411;
+  --cacao: #2d2b2b;
 
-  --color-neutral-100: #f8f4f4;
-  --color-neutral-200: #eae7e7;
-  --color-neutral-300: #d7d3d3;
-  --color-neutral-900: #2d2b2b;
+  /* Semánticos, modo claro */
+  --bg: var(--harina);
+  --surface: var(--masa); /* fondos cálidos: tarjetas, cajas */
+  --text: var(--cacao);
+  --text-muted: #5e5a57; /* 6.1:1 sobre Harina */
+  --accent-text: var(--canela); /* texto pequeño de acento: 5.97:1 */
+  --accent-line: var(--caramelo); /* solo líneas, íconos y texto grande */
+  --line: color-mix(in srgb, var(--cacao) 14%, transparent);
+  --line-strong: #8c8681; /* bordes de inputs: 3.2:1 (no-texto ≥ 3:1) */
+  --logo: var(--canela);
+  --btn-bg: var(--cacao);
+  --btn-text: var(--harina);
+  --inverse-bg: var(--cacao); /* barra de anuncio y footer */
+  --inverse-text: var(--harina);
+  --inverse-accent: var(--miel);
+  --scrim: color-mix(in srgb, var(--cacao) 50%, transparent);
+  --shadow-color: 30deg 6% 17%;
 
-  --color-accent-100: #fff3e4;
-  --color-accent-200: #ffe3bf;
-  --color-accent-300: #facb8d;
-  --color-accent-400: #e1ad66;
-  --color-accent-500: #c28d41;
-  --color-accent-600: #a06f24;
-  --color-accent-700: #7d5411;
-  --color-accent-800: #5a3b0a;
-  --color-accent-900: #3a270d;
-
-  --font-heading: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-body: "Lora", Georgia, "Times New Roman", serif;
 
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 7px;
+  /* Forma (regla única): 4px para todo; píldora solo para chips y la barra flotante. */
+  --radius: 4px;
+  --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
-  --shadow-md: 0 3px 10px color-mix(in srgb, #2d2b2b 16%, transparent);
-  --shadow-lg: 0 12px 32px color-mix(in srgb, #2d2b2b 22%, transparent);
+  --shadow-md: 0 4px 14px hsl(var(--shadow-color) / 0.14);
+  --shadow-lg: 0 14px 40px hsl(var(--shadow-color) / 0.22);
 
-  --container: 1180px;
-  --gutter: 28px;
-  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --ease-spring: cubic-bezier(0.3, 1.6, 0.5, 1);
+  --container: 1240px;
+  --gutter: clamp(16px, 4vw, 32px);
+  --header-h: 76px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Capas (escala documentada) */
+  --z-sticky: 20;
+  --z-header: 30;
+  --z-bar: 35;
+  --z-scrim: 40;
+  --z-drawer: 50;
+  --z-toast: 60;
 
   color-scheme: light;
+}
+
+/* Modo oscuro: fondo Cacao y logo en Miel, como pide el manual para fondos oscuros. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #211f1f;
+    --surface: #3a3129;
+    --text: var(--harina);
+    --text-muted: #bdb6af;
+    --accent-text: var(--miel);
+    --accent-line: var(--caramelo);
+    --line: color-mix(in srgb, var(--harina) 14%, transparent);
+    --line-strong: #8c8681;
+    --logo: var(--miel);
+    --btn-bg: var(--harina);
+    --btn-text: var(--cacao);
+    --inverse-bg: #171515;
+    --inverse-text: var(--harina);
+    --inverse-accent: var(--miel);
+    --scrim: rgb(0 0 0 / 0.55);
+    --shadow-color: 0deg 0% 0%;
+    color-scheme: dark;
+  }
 }
 
 /* ═══ Base ═══ */
@@ -46,33 +85,35 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 12px);
   -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
-  background: var(--color-bg);
-  color: var(--color-text);
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, p { margin: 0; }
-h1, h2, h3 { font-family: var(--font-heading); font-weight: 400; }
-img { display: block; max-width: 100%; }
-button { font: inherit; }
+h1, h2, h3, p, figure, blockquote { margin: 0; }
+/* Manual de marca: sin negritas; el énfasis se hace con cursiva. */
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.08; text-wrap: balance; }
+em { font-style: italic; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
 
-a { color: var(--color-accent-700); text-underline-offset: 3px; }
-a:hover { color: var(--color-accent-900); }
+a { color: var(--accent-text); text-underline-offset: 3px; }
 
 :focus { outline: none; }
-:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+:focus-visible { outline: 2px solid var(--accent-line); outline-offset: 3px; border-radius: 2px; }
+::selection { background: color-mix(in srgb, var(--caramelo) 32%, transparent); }
 
-.tnum { font-feature-settings: "tnum", "lnum"; }
+.tnum { font-variant-numeric: tabular-nums lining-nums; }
 
 .container {
   width: 100%;
@@ -81,87 +122,72 @@ a:hover { color: var(--color-accent-900); }
   padding-inline: var(--gutter);
 }
 
-.kicker {
-  font-family: var(--font-heading);
-  font-size: 16px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--color-accent-700);
-}
-
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
 
 .skip-link {
-  position: absolute; left: 16px; top: -60px; z-index: 100;
-  padding: 10px 16px; background: var(--color-bg); border: 1px solid var(--color-accent);
-  border-radius: var(--radius-md); transition: top 0.2s ease;
+  position: absolute; left: 16px; top: -80px; z-index: 100;
+  padding: 10px 16px; background: var(--bg); color: var(--text);
+  border: 1px solid var(--accent-line); border-radius: var(--radius);
+  transition: top 0.2s ease;
 }
 .skip-link:focus-visible { top: 12px; }
 
-/* ═══ Botones ═══ */
+/* ═══ Botones ═══
+   Primario: relleno Cacao (el color de marca va en líneas y detalles, no en grandes rellenos).
+   Secundario: contorno. Fantasma: sin borde. */
 .btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 46px; padding: 12px 22px;
   flex-shrink: 0; white-space: nowrap;
-  cursor: pointer; text-decoration: none;
-  font-family: var(--font-heading); font-weight: 600;
-  font-size: 14px; line-height: 1.2; color: var(--color-text);
-  background: transparent; border: 1px solid transparent;
-  padding: 9px 16px;
-  border-radius: var(--radius-md);
-  transition: background-color 0.2s ease;
+  font-family: var(--font-body); font-size: 15px; line-height: 1.2; letter-spacing: 0.01em;
+  text-decoration: none; cursor: pointer;
+  border: 1px solid transparent; border-radius: var(--radius);
+  background: transparent; color: var(--text);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  touch-action: manipulation;
 }
-.btn svg { display: block; flex: none; }
+.btn svg { flex: none; }
+.btn:active { transform: translateY(1px) scale(0.99); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn-primary { color: var(--color-accent-700); border-color: var(--color-accent); }
-.btn-primary:hover { color: var(--color-accent-800); background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
-.btn-primary:active { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
-.btn-secondary { border-color: var(--color-divider); color: var(--color-text); }
-.btn-secondary:hover { color: var(--color-text); background: color-mix(in srgb, var(--color-text) 7%, transparent); }
-.btn-secondary:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
-.btn-ghost { color: var(--color-text); }
-.btn-ghost:hover { color: var(--color-text); background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
-.btn-icon { width: 40px; height: 40px; padding: 0; }
-.btn-lg { padding: 14px 26px; font-size: 16px; gap: 10px; }
 
-/* ═══ Formularios ═══ */
+.btn-primary { background: var(--btn-bg); color: var(--btn-text); }
+.btn-primary:hover { background: color-mix(in srgb, var(--btn-bg) 86%, var(--caramelo)); color: var(--btn-text); }
+
+.btn-outline { border-color: var(--line-strong); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent-line); color: var(--accent-text); }
+
+.btn-ghost { color: var(--text); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--caramelo) 12%, transparent); }
+
+.btn-icon { width: 44px; min-height: 44px; padding: 0; }
+.btn-sm { min-height: 40px; padding: 8px 14px; font-size: 14px; gap: 6px; }
+
+/* ═══ Inputs estilo «etiqueta de caja»: línea para escribir, no caja. ═══ */
 .input {
-  width: 100%; min-height: 40px; padding: 8px 10px;
+  width: 100%; min-height: 44px; padding: 8px 2px;
   font: inherit; font-size: 16px; /* ≥16px evita el zoom automático de iOS */
-  color: var(--color-text); caret-color: var(--color-accent);
+  color: var(--text); caret-color: var(--accent-line);
   background: transparent;
-  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+  border: 0; border-bottom: 1px solid var(--line-strong); border-radius: 0;
+  transition: border-color 0.2s ease;
 }
-.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
-.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
-.input[aria-invalid="true"] { border-color: var(--color-accent-700); }
-textarea.input { min-height: 72px; resize: vertical; }
+.input::placeholder { color: var(--text-muted); opacity: 0.85; }
+.input:hover { border-bottom-color: var(--text); }
+.input:focus-visible { outline: none; border-bottom: 2px solid var(--accent-line); padding-bottom: 7px; }
+.input[aria-invalid="true"] { border-bottom: 2px solid var(--accent-text); padding-bottom: 7px; }
+textarea.input { min-height: 64px; resize: vertical; line-height: 1.5; }
 
-/* ═══ Plate (marco de foto) ═══ */
-.plate {
-  position: relative;
-  overflow: hidden;
-  border: 6px solid var(--color-surface);
-  outline: 1px solid var(--color-divider);
-  background: var(--color-surface);
-}
-.plate img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: sepia(0.22) saturate(0.82) contrast(1.05);
-}
-
-/* ═══ Aparición al hacer scroll ═══
-   Solo se oculta si hay JS y el usuario no pidió reducir movimiento:
-   sin JS (o con reduced-motion) todo el contenido es visible desde el inicio. */
+/* ═══ Aparición al hacer scroll (solo con JS y sin reduced-motion) ═══ */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
   [data-reveal] {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(20px);
     transition:
-      opacity 0.8s ease var(--reveal-delay, 0ms),
-      transform 0.9s var(--ease-soft) var(--reveal-delay, 0ms);
+      opacity 0.7s ease var(--reveal-delay, 0ms),
+      transform 0.8s var(--ease-out) var(--reveal-delay, 0ms);
   }
   [data-reveal].is-visible { opacity: 1; transform: none; }
 }
@@ -170,6 +196,7 @@ textarea.input { min-height: 72px; resize: vertical; }
   html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

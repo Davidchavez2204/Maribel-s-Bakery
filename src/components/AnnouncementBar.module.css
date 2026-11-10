@@ -1,0 +1,22 @@
+.bar {
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding-block: 9px;
+  text-align: center;
+}
+.inner a { color: var(--inverse-accent); }
+.inner a:hover { color: var(--inverse-text); }
+.sep { width: 5px; height: 5px; background: var(--inverse-accent); transform: rotate(45deg); }
+
+@media (max-width: 640px) {
+  .inner > span:first-child, .sep { display: none; }
+}

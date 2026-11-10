@@ -13,10 +13,10 @@ export function OrderBar() {
   return (
     <div className={`${styles.bar} ${shown ? styles.barShown : ""}`} inert={!shown}>
       <button type="button" className={styles.barBtn} onClick={openDrawer} aria-controls="pedido-drawer">
-        <ShoppingBag size={18} strokeWidth={1.5} color="var(--color-accent-700)" aria-hidden="true" />
-        <span>{count === 1 ? "1 producto" : `${count} productos`}</span>
+        <ShoppingBag size={18} strokeWidth={1.5} aria-hidden="true" />
+        <span className={styles.barCount}>{count === 1 ? "1 postre" : `${count} postres`}</span>
         <span className={`${styles.barTotal} tnum`}>{formatMoney(totalReferencial(lineas))}</span>
-        <span className={styles.barCta}>Ver pedido →</span>
+        <span className={styles.barCta}>Ver mi pedido</span>
       </button>
     </div>
   );

@@ -5,10 +5,12 @@
  */
 export const SITE = {
   nombre: "Maribel's Bakery",
-  titulo: "Maribel's Bakery — Repostería casera",
+  titulo: "Maribel's Bakery | Repostería hecha en casa",
   descripcion:
-    "Postres de primera calidad, al alcance de tu mano. Pasteles, pays, cupcakes y brownies por encargo. Haz tu pedido y confírmalo por WhatsApp.",
+    "Postres de primera calidad, al alcance de tu mano. Pasteles, pays, cupcakes y brownies hechos en casa, por encargo. Elige tus postres y confirma tu pedido por WhatsApp.",
   tagline: "Postres hechos con amor, para cada ocasión.",
+  /** Frase de la tarjeta de agradecimiento (manual de marca). */
+  gracias: "Gracias por dejarme endulzar tu día.",
   /** URL pública; se define en Netlify con NEXT_PUBLIC_SITE_URL. */
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://maribels-bakery.netlify.app").replace(/\/$/, ""),
 

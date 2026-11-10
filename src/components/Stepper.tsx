@@ -11,7 +11,7 @@ interface StepperProps {
   size?: "md" | "sm";
 }
 
-/** Control – qty +. Reutilizado en la tarjeta de producto y en el panel del pedido. */
+/** Control: menos, cantidad, más. Reutilizado en la tarjeta de producto y en el panel del pedido. */
 export function Stepper({ qty, label, onDec, onInc, size = "md" }: StepperProps) {
   const icon = size === "md" ? 16 : 14;
   return (
