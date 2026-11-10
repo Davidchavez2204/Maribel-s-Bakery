@@ -32,7 +32,7 @@ Requiere Node 20 o superior.
 |---|---|
 | Teléfono de WhatsApp, dirección, mostrar u ocultar precios | `src/config/site.ts` |
 | Productos, precios, categorías | `src/data/productos.ts` |
-| Fotos | Sube los archivos a `public/fotos/` y pon la ruta en `foto` (producto) o en `FOTOS` (hero y catering) |
+| Fotos | Sube los archivos a `public/fotos/` y pon la ruta en `foto` (producto) o en `FOTOS.hero` |
 | Formato del mensaje de WhatsApp | `src/lib/whatsapp.ts` |
 | Colores (paleta «de cocina», modo claro y oscuro) | `src/app/globals.css` (`:root`) |
 | Logos (sello, horizontal, monograma) | `src/components/Logo.tsx` (SVG oficiales con `currentColor`) |
