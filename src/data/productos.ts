@@ -34,11 +34,13 @@ export const CATEGORIA_LABEL: Record<Categoria, string> = Object.fromEntries(
 ) as Record<Categoria, string>;
 
 export const PRODUCTOS: readonly Producto[] = [
-  { id: "torta-chocolate", cat: "pasteles", nombre: "Torta de chocolate", desc: "Bizcocho húmedo de cacao con fudge casero.", precio: 65, unidad: "Entera · 12 porciones" },
-  { id: "tres-leches", cat: "pasteles", nombre: "Tres leches", desc: "Suave, bien remojada y con merengue italiano.", precio: 60, unidad: "Entera · 12 porciones" },
+  // Orden: primero los postres con foto, para que la carta abra con imágenes reales.
+  { id: "torta-chocolate", cat: "pasteles", nombre: "Torta de chocolate", desc: "Bizcocho húmedo de cacao, cubierto de fudge y chispas de chocolate.", precio: 65, unidad: "Entera · 12 porciones", foto: "/fotos/torta-chocolate.webp" },
+  { id: "tres-leches", cat: "pasteles", nombre: "Tres leches", desc: "Suave, bien remojada, con crema batida y un toque de canela.", precio: 60, unidad: "Entera · 12 porciones", foto: "/fotos/tres-leches.webp" },
+  { id: "torta-zanahoria", cat: "pasteles", nombre: "Torta de zanahoria", desc: "Húmeda y especiada, con frosting de queso crema y nueces.", precio: 60, unidad: "Entera · 12 porciones", foto: "/fotos/torta-zanahoria.webp" },
+  { id: "pay-limon", cat: "pays", nombre: "Pay de limón", desc: "Base crocante, relleno cítrico y merengue dorado.", precio: 45, unidad: "Entero · 8 porciones", foto: "/fotos/pay-limon.webp" },
+  { id: "pay-manzana", cat: "pays", nombre: "Pay de manzana", desc: "Manzana con canela en masa quebrada, con su enrejado de siempre.", precio: 48, unidad: "Entero · 8 porciones", foto: "/fotos/pay-manzana.webp" },
   { id: "torta-fresas", cat: "pasteles", nombre: "Torta de fresas con crema", desc: "Vainilla, crema chantilly y fresas frescas.", precio: 70, unidad: "Entera · 12 porciones" },
-  { id: "pay-limon", cat: "pays", nombre: "Pay de limón", desc: "Base crocante, relleno cítrico y merengue dorado.", precio: 45, unidad: "Entero · 8 porciones" },
-  { id: "pay-manzana", cat: "pays", nombre: "Pay de manzana", desc: "Manzana con canela en masa quebrada.", precio: 48, unidad: "Entero · 8 porciones" },
   { id: "cupcakes-vainilla", cat: "cupcakes", nombre: "Cupcakes de vainilla", desc: "Con frosting de mantequilla y decoración a elección.", precio: 30, unidad: "Caja de 6" },
   { id: "cupcakes-redvelvet", cat: "cupcakes", nombre: "Cupcakes red velvet", desc: "Con frosting de queso crema.", precio: 36, unidad: "Caja de 6" },
   { id: "brownies-clasicos", cat: "brownies", nombre: "Brownies clásicos", desc: "Densos, chocolatosos y con costra crujiente.", precio: 25, unidad: "Caja de 6" },

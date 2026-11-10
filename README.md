@@ -41,6 +41,7 @@ Requiere Node 20 o superior.
 hero 4:5 (~1000×1250), productos 4:5 (~800×1000) y mesa de postres 3:2 (~1200×800), de menos de 200 KB cada una.
 Según el manual: luz natural, fondos simples y sin filtros fuertes.
 Mientras no haya foto se muestra un fondo Masa con el monograma de la marca.
+Los originales (JPG) se guardan en `assets/fotos-originales/`, fuera de `public/`, para poder volver a exportarlos sin publicar duplicados.
 
 ## Arquitectura
 
