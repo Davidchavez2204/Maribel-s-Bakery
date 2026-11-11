@@ -142,11 +142,11 @@ const scrollAll = async (p) => p.evaluate(async () => { for (let y = 0; y < docu
     check("los enlaces de WhatsApp abren en pestaña nueva y seguros", await page.$$eval('a[href*="wa.me"]', (as) => as.every((a) => a.target === "_blank" && a.rel.includes("noopener"))));
     const waHeader = waText(await page.getAttribute('header a[href*="wa.me"]', "href"));
     check("mensaje predeterminado: «Hola Mary, quiero hacer un pedido»", waHeader === "Hola Mary, quiero hacer un pedido", waHeader);
-    const fab = page.locator('a[aria-label^="¿Antojo de otro postre?"]');
+    const fab = page.locator('a[aria-label^="¿No encuentras lo que buscas?"]');
     await page.waitForTimeout(2000); // entrada animada del botón (1.2 s + 0.6 s)
     const fabBox = await fab.boundingBox();
     check("botón flotante de WhatsApp visible abajo a la derecha", !!fabBox && fabBox.x + fabBox.width >= 1366 - 40 && fabBox.y + fabBox.height >= 900 - 40, JSON.stringify(fabBox));
-    check("el botón flotante muestra la pregunta en escritorio", await page.isVisible('a[aria-label^="¿Antojo"] :text("¿Antojo de otro postre?")'));
+    check("el botón flotante muestra la pregunta en escritorio", await page.isVisible('a[aria-label^="¿No encuentras"] :text("¿No encuentras lo que buscas?")'));
     const waFab = waText(await fab.getAttribute("href"));
     check("el botón flotante abre WhatsApp con el saludo y el pedido fuera de carta", waFab.startsWith("Hola Mary, quiero hacer un pedido de un postre que no está en la carta"), waFab);
     await ctx.close();
@@ -345,12 +345,12 @@ const scrollAll = async (p) => p.evaluate(async () => { for (let y = 0; y < docu
     await page.waitForTimeout(2200);
     const cajas = await page.evaluate(() => {
       const r = (el) => el && el.getBoundingClientRect();
-      return { fab: r(document.querySelector('a[aria-label^="¿Antojo"]')), bar: r(document.querySelector('[class*="barBtn"]')) };
+      return { fab: r(document.querySelector('a[aria-label^="¿No encuentras"]')), bar: r(document.querySelector('[class*="barBtn"]')) };
     });
     const choca = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
     check(`${nombre}: el botón de WhatsApp no tapa la barra del pedido`, cajas.fab && cajas.bar && !choca(cajas.fab, cajas.bar) && cajas.fab.right <= innerWidthOf(dev), JSON.stringify(cajas));
     await page.click('[class*="barBtn"]'); await page.waitForTimeout(600);
-    check(`${nombre}: con el panel abierto el botón de WhatsApp se oculta`, await page.$eval('a[aria-label^="¿Antojo"]', (a) => a.inert));
+    check(`${nombre}: con el panel abierto el botón de WhatsApp se oculta`, await page.$eval('a[aria-label^="¿No encuentras"]', (a) => a.inert));
     await page.fill("#pedido-nombre", "Prueba " + nombre);
     const vis = await page.isVisible(sel.send);
     const inView = await page.$eval(sel.send, (a) => { const r = a.getBoundingClientRect(); return r.bottom <= innerHeight && r.top >= 0; });
@@ -361,7 +361,7 @@ const scrollAll = async (p) => p.evaluate(async () => { for (let y = 0; y < docu
       els.filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.width < 24 || r.height < 24); }).map((e) => (e.getAttribute("aria-label") || e.textContent || e.id).trim().slice(0, 30)));
     check(`${nombre}: controles del panel ≥ 24 px`, peq.length === 0, peq.join(", "));
     await page.keyboard.press("Escape"); await page.waitForTimeout(400);
-    const peqPage = await page.$$eval("header a, header button, #productos button, main a.btn, footer a, a[aria-label^='¿Antojo']", (els) =>
+    const peqPage = await page.$$eval("header a, header button, #productos button, main a.btn, footer a, a[aria-label^='¿No encuentras']", (els) =>
       els.filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.width < 24 || r.height < 24); }).map((e) => (e.getAttribute("aria-label") || e.textContent).trim().slice(0, 30)));
     check(`${nombre}: botones y enlaces de la página ≥ 24 px`, peqPage.length === 0, peqPage.join(", "));
     check(`${nombre}: sin errores`, page.errors.length === 0, page.errors.join(" | "));

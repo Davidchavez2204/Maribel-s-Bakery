@@ -13,12 +13,12 @@ function IconoWhatsApp() {
   );
 }
 
-const PREGUNTA = "¿Antojo de otro postre?";
-const DETALLE = "Escríbeme y lo preparo por encargo";
+const PREGUNTA = "¿No encuentras lo que buscas?";
+const DETALLE = "Escríbeme y te lo preparo";
 
 /**
  * Botón flotante de WhatsApp (abajo a la derecha) para pedidos fuera de la carta.
- * - Escritorio: píldora con la pregunta. Móvil: disco verde + globo con la pregunta que aparece y se retira solo.
+ * - Escritorio: píldora con la pregunta y el detalle. Móvil: disco verde + globo fijo con la pregunta.
  * - Con productos en el pedido aparece la barra «Ver mi pedido»: el botón se compacta al ícono y,
  *   donde no caben los dos, sube para no taparla. Con el panel abierto se oculta.
  * El nombre accesible incluye todo el texto visible (WCAG 2.5.3) aunque el texto se oculte en móvil.

@@ -45,7 +45,7 @@
   .fab[data-compacto] { bottom: calc(var(--gap-borde) + 68px); }
 }
 
-/* Móvil: disco verde; la pregunta sale como globo de diálogo y se retira sola para no tapar la carta. */
+/* Móvil: disco verde con la pregunta en un globo de diálogo a su izquierda (solo la pregunta, para ocupar poco). */
 @media (max-width: 600px) {
   .fab { padding: 6px; }
   .texto {
@@ -56,11 +56,9 @@
     border-radius: var(--radius);
     background: var(--surface);
     box-shadow: var(--shadow-md), inset 0 0 0 1px color-mix(in srgb, var(--accent-line) 45%, transparent);
-    opacity: 0;
-    visibility: hidden;
   }
-  .pregunta { font-size: 18px; }
-  .detalle { font-size: 12px; }
+  .pregunta { font-size: 17px; }
+  .detalle { display: none; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -76,7 +74,7 @@
     animation: pulso 1.8s ease-out 2s 2;
   }
   @media (max-width: 600px) {
-    .fab:not([data-compacto]) .texto { animation: globo 8s ease 1.8s both; }
+    .fab:not([data-compacto]) .texto { animation: globo 0.5s var(--ease-out) 1.6s backwards; }
   }
 }
 
@@ -85,8 +83,4 @@
   0% { opacity: 0.7; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.6); }
 }
-@keyframes globo {
-  0% { opacity: 0; visibility: visible; transform: translateX(8px); }
-  6%, 88% { opacity: 1; visibility: visible; transform: none; }
-  100% { opacity: 0; visibility: hidden; transform: translateX(8px); }
-}
+@keyframes globo { from { opacity: 0; transform: translateX(8px); } }
