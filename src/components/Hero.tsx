@@ -65,7 +65,7 @@ export function Hero() {
             </span>
           </h1>
           <p className={`${styles.lead} ${styles.in}`} style={d(460)}>
-            Pasteles, pays, cupcakes y brownies con recetas de familia. Elige los tuyos y confírmalos conmigo por
+            Tortas, cheesecakes, kekes y pays con recetas de familia. Elige los tuyos y confírmalos conmigo por
             WhatsApp.
           </p>
           <div className={`${styles.ctas} ${styles.in}`} style={d(580)}>

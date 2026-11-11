@@ -93,7 +93,7 @@ function FeatureCard({ p }: { p: Producto }) {
   return (
     <article className={styles.feature} aria-labelledby={`prod-${p.id}`}>
       <div className={styles.featureMedia}>
-        <Plate src={p.foto} alt={p.nombre} ratio="3 / 2" sizes="(max-width: 900px) 100vw, 620px" />
+        <Plate src={p.foto} alt={p.nombre} ratio="4 / 3" sizes="(max-width: 900px) 100vw, 620px" />
         <Stamp qty={cart[p.id] ?? 0} />
       </div>
       <div className={styles.featureBody}>

@@ -6,3 +6,6 @@ next-env.d.ts
 .env*.local
 .netlify
 .DS_Store
+
+# Fotos originales (pesadas): se guardan en disco, no en git. Respáldalas aparte (p. ej. Drive).
+assets/fotos-originales/
