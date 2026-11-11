@@ -34,6 +34,9 @@ export function Hero() {
               alt=""
               fill
               priority
+              // Next 16: `priority` precarga, pero la prioridad de red la fija fetchPriority.
+              fetchPriority="high"
+              loading="eager"
               sizes="100vw"
               className={styles.photo}
               style={{ objectPosition: FOTOS.heroPosicion }}

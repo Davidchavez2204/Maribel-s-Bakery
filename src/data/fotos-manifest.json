@@ -1,0 +1,97 @@
+{
+  "/fotos/cheesecake-arandanos.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/cheesecake-fresa.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/cheesecake-maracuya.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/hero.webp": {
+    "ancho": 2400,
+    "variantes": [
+      400,
+      600,
+      800,
+      1200,
+      1600
+    ]
+  },
+  "/fotos/keke-naranja.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/keke-platano.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/mesa-postres.webp": {
+    "ancho": 1200,
+    "variantes": [
+      400,
+      600,
+      800
+    ]
+  },
+  "/fotos/pastel-acelga.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/pay-limon.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/pay-manzana.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/torta-chocolate.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/torta-zanahoria.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  },
+  "/fotos/tres-leches.webp": {
+    "ancho": 800,
+    "variantes": [
+      400,
+      600
+    ]
+  }
+}

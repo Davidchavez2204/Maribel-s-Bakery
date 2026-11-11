@@ -4,7 +4,10 @@
   "private": true,
   "description": "Sitio web de Maribel's Bakery — carta y pedidos por WhatsApp",
   "scripts": {
+    "fotos": "node scripts/optimizar-fotos.mjs",
+    "predev": "node scripts/optimizar-fotos.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/optimizar-fotos.mjs",
     "build": "next build",
     "start": "npx serve@14 out",
     "typecheck": "tsc --noEmit"
@@ -24,6 +27,7 @@
     "@types/node": "22.18.0",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
+    "sharp": "0.35.5",
     "typescript": "5.9.3"
   }
 }

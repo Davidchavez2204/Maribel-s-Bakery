@@ -32,7 +32,7 @@ Requiere Node 20 o superior.
 |---|---|
 | Teléfono de WhatsApp, dirección, mostrar u ocultar precios | `src/config/site.ts` |
 | Productos, precios, categorías | `src/data/productos.ts` |
-| Fotos | Sube los archivos a `public/fotos/` y pon la ruta en `foto` (producto) o en `FOTOS.hero` |
+| Fotos | Sube el `.webp` a `public/fotos/` y pon la ruta en `foto` (producto) o en `FOTOS.hero`. Las versiones reducidas se generan solas (`npm run fotos`, corre antes de `dev` y `build`) |
 | Formato del mensaje de WhatsApp | `src/lib/whatsapp.ts` |
 | Colores (paleta «de cocina», modo claro y oscuro) | `src/app/globals.css` (`:root`) |
 | Logos (sello, horizontal, monograma) | `src/components/Logo.tsx` (SVG oficiales con `currentColor`) |
@@ -79,6 +79,18 @@ Todas se desactivan si el usuario tiene activado «reducir movimiento» en su si
 | Al separar | Un sello vuela del botón al carrito; cantidades y total «saltan» | `lib/flyToCart.ts` (Web Animations API) |
 
 Las animaciones ligadas al scroll son mejora progresiva: en navegadores sin soporte, el contenido simplemente aparece sin movimiento.
+
+## Pruebas
+
+Suite funcional de punta a punta (108 verificaciones: carta, filtros, carrito, validación, mensaje exacto de WhatsApp,
+persistencia, modo privado, teclado, 5 dispositivos, accesibilidad WCAG 2.2 AA con axe, SEO). Nunca envía nada a WhatsApp.
+
+```bash
+npm i --no-save playwright axe-core && npx playwright install chromium   # una sola vez
+npm run build
+node qa/serve.cjs      # terminal 1: sirve out/ con la CSP de netlify.toml
+node qa/suite.cjs      # terminal 2: resultados en consola y en qa/resultados.json
+```
 
 ## Pendientes con la clienta
 
