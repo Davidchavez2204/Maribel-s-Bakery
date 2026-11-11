@@ -184,7 +184,16 @@
   align-items: center;
 }
 .line + .line { border-top: 1px solid var(--line); }
-.lineName { font-family: var(--font-display); font-size: 24px; line-height: 1.12; }
+.lineName { font-family: var(--font-display); font-size: 24px; line-height: 1.12; display: flex; flex-direction: column; gap: 4px; }
+.lineSize {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--accent-text);
+}
+.lineSize svg { color: var(--accent-line); }
 .lineSub { font-family: var(--font-display); font-size: 22px; text-align: right; }
 .lineCtrl { display: flex; align-items: center; gap: 12px; }
 .lineUnit { font-size: 13px; color: var(--text-muted); }

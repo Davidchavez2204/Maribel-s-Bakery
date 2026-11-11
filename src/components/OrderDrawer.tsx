@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { SITE } from "@/config/site";
 import { useOrder } from "@/context/OrderContext";
 import { formatMoney, hayCotizacion, mensajePedido, totalReferencial, waUrl, type Entrega } from "@/lib/whatsapp";
+import { IconoTamano } from "./IconosTamano";
 import { Monograma, Sello } from "./Logo";
 import { Stepper } from "./Stepper";
 import styles from "./OrderUI.module.css";
@@ -117,7 +118,7 @@ export function OrderDrawer() {
               <p className={styles.stateText}>
                 Tu pedido ya está escrito en WhatsApp. Solo presiona <em>enviar</em> y te confirmo el total y la entrega.
               </p>
-              <figcaption className={styles.thanksSign}>Maribel</figcaption>
+              <figcaption className={styles.thanksSign}>Mary</figcaption>
             </figure>
             <a href={waPedido} target="_blank" rel="noopener noreferrer" className={styles.retry}>
               ¿No se abrió WhatsApp? Ábrelo de nuevo
@@ -155,21 +156,35 @@ export function OrderDrawer() {
           <>
             <div className={styles.scroll}>
               <ul className={styles.lines}>
-                {lineas.map(({ producto: p, qty }) => (
-                  <li key={p.id} className={styles.line}>
-                    <span className={styles.lineName}>{p.nombre}</span>
-                    <span className={`${styles.lineSub} tnum`}>
-                      {p.precio === null ? "A cotizar" : formatMoney(p.precio * qty)}
-                    </span>
-                    <div className={styles.lineCtrl}>
-                      <Stepper size="sm" qty={qty} label={p.nombre} onDec={() => o.setQty(p.id, qty - 1)} onInc={() => o.setQty(p.id, qty + 1)} />
-                      <span className={styles.lineUnit}>{p.unidad}</span>
-                    </div>
-                    <button type="button" className={styles.remove} onClick={() => o.setQty(p.id, 0)} aria-label={`Quitar ${p.nombre} del pedido`}>
-                      Quitar
-                    </button>
-                  </li>
-                ))}
+                {lineas.map(({ key, producto: p, opcion: op, qty }) => {
+                  const label = op.tamano === "unico" ? p.nombre : `${p.nombre}, ${op.etiqueta.toLowerCase()}`;
+                  return (
+                    <li key={key} className={styles.line}>
+                      <span className={styles.lineName}>
+                        {p.nombre}
+                        {op.tamano !== "unico" && (
+                          <span className={styles.lineSize}>
+                            <IconoTamano tamano={op.tamano} size={16} />
+                            {op.etiqueta}
+                          </span>
+                        )}
+                      </span>
+                      <span className={`${styles.lineSub} tnum`}>
+                        {op.precio === null ? "A cotizar" : formatMoney(op.precio * qty)}
+                      </span>
+                      <div className={styles.lineCtrl}>
+                        <Stepper size="sm" qty={qty} label={label} onDec={() => o.setQty(key, qty - 1)} onInc={() => o.setQty(key, qty + 1)} />
+                        <span className={styles.lineUnit}>
+                          {op.detalle}
+                          {op.precio !== null && qty > 1 ? ` · ${formatMoney(op.precio)} c/u` : ""}
+                        </span>
+                      </div>
+                      <button type="button" className={styles.remove} onClick={() => o.setQty(key, 0)} aria-label={`Quitar ${label} del pedido`}>
+                        Quitar
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
 
               {/* «Etiqueta de caja» del manual: sello a un lado y líneas para escribir. */}

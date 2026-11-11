@@ -107,10 +107,75 @@
   overflow: hidden;
 }
 
-.foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.price { display: flex; flex-direction: column; gap: 2px; }
-.amount { font-family: var(--font-display); font-size: 26px; line-height: 1; }
 .unit { font-size: 13px; color: var(--text-muted); }
+
+/* ── Precios escalonados: entera (nivel 1) → media → porción ──
+   Cada nivel «baja un escalón»: menos tamaño de precio e ícono y más sangría.
+   Una línea Caramelo en escalera une los niveles a la izquierda. */
+.tiers {
+  --step: 18px;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+.tier {
+  --indent: 0px;
+  --price: 34px;
+  --icon: 34px;
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--icon) minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: 12px;
+  padding: 10px 0 10px var(--indent);
+  border-top: 1px dashed color-mix(in srgb, var(--accent-line) 45%, transparent);
+}
+.tier[data-nivel="2"] { --indent: var(--step); --price: 25px; --icon: 28px; }
+.tier[data-nivel="3"] { --indent: calc(var(--step) * 2); --price: 19px; --icon: 24px; }
+
+/* Escalón: codo de línea desde el nivel anterior hasta el ícono de este nivel. */
+.tier[data-nivel="2"]::before,
+.tier[data-nivel="3"]::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--indent) - var(--step) + 9px);
+  top: -1px;
+  width: calc(var(--step) - 12px);
+  height: calc(50% + 1px);
+  border-left: 1px solid var(--accent-line);
+  border-bottom: 1px solid var(--accent-line);
+  border-bottom-left-radius: 4px;
+  opacity: 0.7;
+}
+
+.tierIcon { width: var(--icon); height: var(--icon); color: var(--accent-line); justify-self: center; }
+.tierText { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.tierLabel { font-size: 15px; }
+.tier[data-nivel="1"] .tierLabel { font-size: 16px; }
+.tierDetail { font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
+.tierPrice { font-family: var(--font-display); font-size: var(--price); line-height: 1; white-space: nowrap; }
+.tier[data-nivel="1"] .tierPrice { color: var(--text); }
+
+.addBtn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  touch-action: manipulation;
+}
+.addBtn:hover { border-color: var(--btn-bg); background: var(--btn-bg); color: var(--btn-text); }
+.addBtn:active { transform: scale(0.92); }
+/* El primer nivel lleva el «+» destacado: es la opción principal. */
+.tier[data-nivel="1"] .addBtn { background: var(--btn-bg); border-color: var(--btn-bg); color: var(--btn-text); }
+.tier[data-nivel="1"] .addBtn:hover { background: color-mix(in srgb, var(--btn-bg) 86%, var(--caramelo)); }
 
 /* ── Sello «separado» ── */
 .stamp {
@@ -164,13 +229,24 @@
   .feature { grid-template-columns: 1fr; }
   .featureBody { padding: 0 4px 8px; }
 }
+/* Pantallas muy angostas (iPhone SE): escalón y controles más compactos para que nada se parta. */
+@media (max-width: 380px) {
+  .tiers { --step: 12px; }
+  .tier { column-gap: 8px; }
+  .tier [role="group"] button { width: 30px; height: 34px; }
+  .tier [role="group"] span { min-width: 20px; }
+}
+
+/* Móvil: una columna (los tres niveles necesitan ancho) y foto más baja para no alargar la carta. */
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; gap: 44px; }
+  .media > div { aspect-ratio: 4 / 3 !important; }
+  .media img { object-position: 50% 62%; }
+}
 @media (max-width: 560px) {
   .card { gap: 12px; }
-  .name { font-size: 21px; }
-  .desc { font-size: 13px; }
-  .foot { flex-direction: column; align-items: stretch; gap: 10px; }
-  .actionFull { width: 100%; }
-  .amount { font-size: 22px; }
+  .name { font-size: 24px; }
+  .desc { font-size: 14px; }
   .stamp { width: 66px; height: 66px; top: 8px; right: 8px; }
   .stampQty { font-size: 21px; }
   .stampLabel { font-size: 7px; letter-spacing: 0.04em; }

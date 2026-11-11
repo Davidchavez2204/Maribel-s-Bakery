@@ -11,12 +11,15 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PRODUCTOS, PRODUCTOS_POR_ID, type Filtro } from "@/data/productos";
-import type { Entrega, LineaPedido } from "@/lib/whatsapp";
+import { clave, OPCIONES_POR_CLAVE, PRODUCTOS, PRODUCTOS_POR_ID, type Filtro } from "@/data/productos";
+import { describirLinea, type Entrega, type LineaPedido } from "@/lib/whatsapp";
 
-const STORAGE_KEY = "maribels_pedido_v1";
+const STORAGE_KEY = "marys_pedido_v2";
+/** Versión anterior (un precio por producto, clave = id). Se migra una sola vez. */
+const LEGACY_KEY = "maribels_pedido_v1";
 const MAX_QTY = 99;
 
+/** clave `producto:tamaño` → cantidad */
 type Cart = Readonly<Record<string, number>>;
 
 interface State {
@@ -68,16 +71,23 @@ function reducer(state: State, action: Action): State {
  */
 function readStorage(): { cart: Cart; nombre: string } | null {
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    let raw = window.localStorage.getItem(STORAGE_KEY);
+    let legacy = false;
+    if (!raw) {
+      raw = window.localStorage.getItem(LEGACY_KEY);
+      legacy = raw !== null;
+    }
     if (!raw) return null;
     const data: unknown = JSON.parse(raw);
     if (typeof data !== "object" || data === null) return null;
     const { cart, nombre } = data as { cart?: unknown; nombre?: unknown };
     const clean: Record<string, number> = {};
     if (typeof cart === "object" && cart !== null) {
-      for (const [id, q] of Object.entries(cart)) {
-        if (PRODUCTOS_POR_ID.has(id) && Number.isInteger(q) && (q as number) > 0) {
-          clean[id] = Math.min(q as number, MAX_QTY);
+      for (const [k, q] of Object.entries(cart)) {
+        // v1 guardaba solo el id del producto: equivale a su primer tamaño (la entera).
+        const key = legacy ? migrarClave(k) : k;
+        if (key && OPCIONES_POR_CLAVE.has(key) && Number.isInteger(q) && (q as number) > 0) {
+          clean[key] = Math.min((clean[key] ?? 0) + (q as number), MAX_QTY);
         }
       }
     }
@@ -87,15 +97,23 @@ function readStorage(): { cart: Cart; nombre: string } | null {
   }
 }
 
+function migrarClave(id: string): string | null {
+  const p = PRODUCTOS_POR_ID.get(id);
+  const primera = p?.opciones[0];
+  return p && primera ? clave(p.id, primera.tamano) : null;
+}
+
 interface OrderContextValue extends State {
   lineas: LineaPedido[];
   count: number;
   open: boolean;
   toast: string | null;
   bump: boolean;
-  /** Agrega 1 unidad; muestra toast y bump solo si el producto era nuevo. */
-  add: (id: string) => void;
-  setQty: (id: string, qty: number) => void;
+  /** Unidades de un producto sumando todos sus tamaños (para el sello «separado»). */
+  qtyProducto: (id: string) => number;
+  /** Agrega 1 unidad de una clave `producto:tamaño`; toast y bump solo si era nueva. */
+  add: (key: string) => void;
+  setQty: (key: string, qty: number) => void;
   setField: (field: "nombre" | "fecha" | "notas", value: string) => void;
   setEntrega: (value: Entrega) => void;
   setSent: (value: boolean) => void;
@@ -146,14 +164,14 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
   const setQty = useCallback((id: string, qty: number) => dispatch({ type: "setQty", id, qty }), []);
 
-  const add = useCallback((id: string) => {
-    const current = state.cart[id] ?? 0;
-    dispatch({ type: "setQty", id, qty: current + 1 });
+  const add = useCallback((key: string) => {
+    const current = state.cart[key] ?? 0;
+    dispatch({ type: "setQty", id: key, qty: current + 1 });
     if (current === 0) {
-      const p = PRODUCTOS_POR_ID.get(id);
+      const item = OPCIONES_POR_CLAVE.get(key);
       clearTimeout(toastTimer.current);
       clearTimeout(bumpTimer.current);
-      setToast(`${p?.nombre ?? "Tu postre"} ya está en tu pedido`);
+      setToast(`${item ? describirLinea(item).replace(/ \(.*\)$/, "") : "Tu postre"} ya está en tu pedido`);
       setBump(true);
       bumpTimer.current = setTimeout(() => setBump(false), 220);
       toastTimer.current = setTimeout(() => setToast(null), 2200);
@@ -161,12 +179,21 @@ export function OrderProvider({ children }: { children: ReactNode }) {
   }, [state.cart]);
 
   const value = useMemo<OrderContextValue>(() => {
-    // Respeta el orden de la carta, no el orden de inserción.
-    const lineas = PRODUCTOS.filter((p) => state.cart[p.id]).map((p) => ({ producto: p, qty: state.cart[p.id] ?? 0 }));
+    // Respeta el orden de la carta (producto y luego tamaño), no el orden de inserción.
+    const lineas: LineaPedido[] = PRODUCTOS.flatMap((producto) =>
+      producto.opciones.flatMap((opcion) => {
+        const key = clave(producto.id, opcion.tamano);
+        const qty = state.cart[key] ?? 0;
+        return qty > 0 ? [{ key, producto, opcion, qty }] : [];
+      }),
+    );
+    const porProducto = new Map<string, number>();
+    for (const l of lineas) porProducto.set(l.producto.id, (porProducto.get(l.producto.id) ?? 0) + l.qty);
     return {
       ...state,
       lineas,
       count: lineas.reduce((a, l) => a + l.qty, 0),
+      qtyProducto: (id) => porProducto.get(id) ?? 0,
       open,
       toast,
       bump,

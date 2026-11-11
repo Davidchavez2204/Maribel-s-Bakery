@@ -19,7 +19,7 @@ export function Header() {
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
-        <a href="#inicio" className={styles.brand} aria-label="Maribel's Bakery, ir al inicio">
+        <a href="#inicio" className={styles.brand} aria-label="Mary's Bakery, ir al inicio">
           {/* Monograma + nombre: el sello completo no se lee por debajo de 64 px (manual). */}
           <LogoHorizontal id="logo-header" compact height={56} />
         </a>

@@ -1,5 +1,5 @@
 /**
- * Logos oficiales (manual de marca, «El sello de casa»), convertidos a componentes:
+ * Logos oficiales (manual de marca de Mary's Bakery, «El sello de casa»), convertidos a componentes:
  * - usan currentColor → un solo SVG sirve en Canela (claro), Miel (oscuro) o blanco.
  * - el texto usa las fuentes ya cargadas por la página (Cormorant 500 + Lora cursiva).
  * Reglas del manual: sello completo desde 64 px; por debajo, usar el monograma.
@@ -23,8 +23,8 @@ function SelloShapes({ id }: { id: string }) {
       </g>
       <path id={`${id}-t`} d="M 42,150 A 108,108 0 0 1 258,150" fill="none" />
       <path id={`${id}-b`} d="M 28,150 A 122,122 0 0 0 272,150" fill="none" />
-      <text fill="currentColor" fontFamily="'Cormorant Garamond'" fontWeight="500" fontSize="22" letterSpacing="4">
-        <textPath href={`#${id}-t`} startOffset="50%" textAnchor="middle">MARIBEL&apos;S BAKERY</textPath>
+      <text fill="currentColor" fontFamily="'Cormorant Garamond'" fontWeight="500" fontSize="24" letterSpacing="6">
+        <textPath href={`#${id}-t`} startOffset="50%" textAnchor="middle">MARY&apos;S BAKERY</textPath>
       </text>
       <text fill="currentColor" fontFamily="'Lora'" fontSize="12.5" letterSpacing="3">
         <textPath href={`#${id}-b`} startOffset="50%" textAnchor="middle">HECHO EN CASA · CON AMOR</textPath>
@@ -66,7 +66,7 @@ export function Monograma({ size = 40, className }: { size?: number | string; cl
 /** Logo horizontal (sello + nombre). `compact` cambia el sello por el monograma (tamaños < 64 px). */
 export function LogoHorizontal({ id, height = 64, compact = false, className }: { id: string; height?: number; compact?: boolean; className?: string }) {
   return (
-    <svg viewBox="0 0 960 300" height={height} width={(height * 960) / 300} className={className} aria-hidden="true">
+    <svg viewBox="0 0 720 300" height={height} width={(height * 720) / 300} className={className} aria-hidden="true">
       {compact ? (
         <g>
           <circle cx="150" cy="150" r="140" fill="none" stroke="currentColor" strokeWidth="5" />
@@ -76,7 +76,7 @@ export function LogoHorizontal({ id, height = 64, compact = false, className }: 
       ) : (
         <SelloShapes id={id} />
       )}
-      <text x="340" y="168" fill="currentColor" fontFamily="'Cormorant Garamond'" fontSize="118">Maribel&apos;s</text>
+      <text x="340" y="168" fill="currentColor" fontFamily="'Cormorant Garamond'" fontSize="118">Mary&apos;s</text>
       <text x="345" y="242" fill="currentColor" fontFamily="'Cormorant Garamond'" fontStyle="italic" fontSize="72">Bakery</text>
     </svg>
   );

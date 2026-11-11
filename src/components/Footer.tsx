@@ -10,7 +10,7 @@ export function Footer() {
     <footer id="contacto" className={styles.footer}>
       <div className={`container ${styles.grid}`}>
         <div className={styles.brand}>
-          <Sello id="sello-footer" size={148} title="Maribel's Bakery, hecho en casa con amor" className={styles.sello} />
+          <Sello id="sello-footer" size={148} title="Mary's Bakery, hecho en casa con amor" className={styles.sello} />
           <p className={styles.tagline}>{SITE.tagline}</p>
         </div>
 

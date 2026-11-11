@@ -1,8 +1,8 @@
 {
-  "name": "maribels-bakery",
+  "name": "marys-bakery",
   "version": "1.0.0",
   "private": true,
-  "description": "Sitio web de Maribel's Bakery — carta y pedidos por WhatsApp",
+  "description": "Sitio web de Mary's Bakery: carta y pedidos por WhatsApp",
   "scripts": {
     "fotos": "node scripts/optimizar-fotos.mjs",
     "predev": "node scripts/optimizar-fotos.mjs",

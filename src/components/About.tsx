@@ -4,7 +4,7 @@ import { Monograma } from "./Logo";
 import styles from "./About.module.css";
 
 /** Promesas tomadas del manual de marca (personalidad y tono). */
-const PROMESAS = ["Recetas de familia, con sabor de casa", "Porciones de verdad", "Si tienes alguna alergia, cuéntame y lo adaptamos"];
+const PROMESAS = ["Recetas de familia, con sabor de casa", "Porciones generosas", "Si tienes alguna alergia, cuéntame y lo adaptamos"];
 
 export function About() {
   return (
@@ -23,7 +23,7 @@ export function About() {
         <blockquote className={styles.quote}>
           <p>{SITE.gracias}</p>
         </blockquote>
-        <figcaption className={styles.sign}>Maribel</figcaption>
+        <figcaption className={styles.sign}>Mary</figcaption>
       </figure>
 
       <ul className={styles.promises} {...reveal(220)}>

@@ -1,4 +1,4 @@
-# Maribel's Bakery — sitio web
+# Mary's Bakery — sitio web
 
 Sitio de una sola página: carta de postres, carrito y envío del pedido como mensaje prellenado de WhatsApp.
 Sin backend ni pagos en línea. **Next.js 16 (App Router) + React 19 + TypeScript + CSS Modules**, exportado como sitio estático.
@@ -20,18 +20,18 @@ Requiere Node 20 o superior.
 **Opción A, con repositorio (recomendada):** sube el proyecto a GitHub, y en Netlify ve a *Add new site → Import from Git*.
 `netlify.toml` ya define el comando de build (`npm run build`), la carpeta a publicar (`out`), Node 22, las cabeceras de seguridad y la caché.
 
-**Opción B, inmediata:** arrastra la carpeta `out/` (o el zip `maribels-bakery-out.zip`) a <https://app.netlify.com/drop>.
+**Opción B, inmediata:** arrastra la carpeta `out/` (o el zip `marys-bakery-out.zip`) a <https://app.netlify.com/drop>.
 ⚠️ Con Netlify Drop **no** se aplica `netlify.toml` (no hay cabeceras de seguridad); úsala solo para salir rápido y migra a la opción A.
 
 **Variable de entorno:** define `NEXT_PUBLIC_SITE_URL` en *Site configuration → Environment variables* con la URL final
-(p. ej. `https://maribelsbakery.pe`). Se usa para la URL canónica, Open Graph y el sitemap. Después de cambiarla, vuelve a desplegar.
+(p. ej. `https://marysbakery.pe`). Se usa para la URL canónica, Open Graph y el sitemap. Después de cambiarla, vuelve a desplegar.
 
 ## Qué editar
 
 | Qué | Dónde |
 |---|---|
 | Teléfono de WhatsApp, dirección, mostrar u ocultar precios | `src/config/site.ts` |
-| Productos, precios, categorías | `src/data/productos.ts` |
+| Productos, precios, categorías | `src/data/productos.ts`. Cada producto tiene `opciones` por tamaño; para tortas, cheesecakes, pays y kekes se usa `niveles(género, porciones, [entera, media, porción])` |
 | Fotos | Sube el `.webp` a `public/fotos/` y pon la ruta en `foto` (producto) o en `FOTOS.hero`. Las versiones reducidas se generan solas (`npm run fotos`, corre antes de `dev` y `build`) |
 | Formato del mensaje de WhatsApp | `src/lib/whatsapp.ts` |
 | Colores (paleta «de cocina», modo claro y oscuro) | `src/app/globals.css` (`:root`) |
@@ -63,7 +63,7 @@ src/
 
 - Paleta: Harina (fondo), Masa (tarjetas), Miel, Caramelo (solo líneas y texto grande), Canela (texto pequeño de acento) y Cacao (texto).
 - Tipografía: Cormorant Garamond para títulos y Lora para textos. Sin negritas: el énfasis va en cursiva.
-- Tono: primera persona de Maribel, tuteo, cálido y sin sonar a empresa.
+- Tono: primera persona de Mary, tuteo, cálido y sin sonar a empresa.
 - Modo oscuro automático (`prefers-color-scheme`): fondo Cacao y logo en Miel, como indica el manual para fondos oscuros.
 
 ## Animaciones

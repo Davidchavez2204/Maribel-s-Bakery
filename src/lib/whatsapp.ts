@@ -1,5 +1,5 @@
 import { SITE } from "@/config/site";
-import type { Producto } from "@/data/productos";
+import type { Opcion, Producto } from "@/data/productos";
 
 /** Formato de precio del diseño: «S/ 65» (sin decimales). */
 export function formatMoney(n: number): string {
@@ -12,16 +12,24 @@ export function waUrl(texto: string): string {
   return `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
 }
 
-export const WA_CONSULTA = waUrl("Hola Maribel, quisiera hacerte una consulta.");
+export const WA_CONSULTA = waUrl("Hola Mary, quisiera hacerte una consulta.");
 export const WA_CATERING = waUrl(
-  "Hola Maribel, quisiera cotizar una mesa de postres.\nFecha: \nInvitados: \nTemática: ",
+  "Hola Mary, quisiera cotizar una mesa de postres.\nFecha: \nInvitados: \nTemática: ",
 );
 
 export type Entrega = "recojo" | "delivery";
 
 export interface LineaPedido {
+  /** Clave `producto:tamaño` (ver `clave()` en data/productos). */
+  key: string;
   producto: Producto;
+  opcion: Opcion;
   qty: number;
+}
+
+/** «Torta de chocolate · Media (6 porciones)» o «Mesa de postres (Según invitados)». */
+export function describirLinea({ producto: p, opcion: o }: Pick<LineaPedido, "producto" | "opcion">): string {
+  return o.tamano === "unico" ? `${p.nombre} (${o.detalle})` : `${p.nombre} · ${o.etiqueta} (${o.detalle})`;
 }
 
 export interface DatosPedido {
@@ -33,11 +41,11 @@ export interface DatosPedido {
 }
 
 export function totalReferencial(lineas: readonly LineaPedido[]): number {
-  return lineas.reduce((acc, l) => acc + (l.producto.precio ?? 0) * l.qty, 0);
+  return lineas.reduce((acc, l) => acc + (l.opcion.precio ?? 0) * l.qty, 0);
 }
 
 export function hayCotizacion(lineas: readonly LineaPedido[]): boolean {
-  return lineas.some((l) => l.producto.precio === null);
+  return lineas.some((l) => l.opcion.precio === null);
 }
 
 /**
@@ -46,11 +54,11 @@ export function hayCotizacion(lineas: readonly LineaPedido[]): boolean {
  */
 export function mensajePedido(lineas: readonly LineaPedido[], datos: DatosPedido): string {
   const total = totalReferencial(lineas);
-  const L: string[] = ["Hola Maribel, quisiera separar este pedido:", ""];
+  const L: string[] = ["Hola Mary, quisiera separar este pedido:", ""];
 
-  for (const { producto: p, qty } of lineas) {
-    const sub = p.precio === null ? "a cotizar" : formatMoney(p.precio * qty);
-    L.push(`• ${qty} × ${p.nombre} (${p.unidad}): ${sub}`);
+  for (const l of lineas) {
+    const sub = l.opcion.precio === null ? "a cotizar" : formatMoney(l.opcion.precio * l.qty);
+    L.push(`• ${l.qty} × ${describirLinea(l)}: ${sub}`);
   }
 
   L.push("", `Total referencial: ${formatMoney(total)}${hayCotizacion(lineas) ? " + mesa de postres a cotizar" : ""}`, "");
