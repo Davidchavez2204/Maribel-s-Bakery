@@ -109,73 +109,94 @@
 
 .unit { font-size: 13px; color: var(--text-muted); }
 
-/* ── Precios escalonados: entera (nivel 1) → media → porción ──
-   Cada nivel «baja un escalón»: menos tamaño de precio e ícono y más sangría.
-   Una línea Caramelo en escalera une los niveles a la izquierda. */
+/* ── Precios escalonados en una fila: entera → media → porción ──
+   Tres bloques tocables alineados abajo y cada vez más bajos: sus bordes superiores
+   forman una escalera que «baja de nivel» de izquierda a derecha. ~85 px de alto en total. */
 .tiers {
-  --step: 18px;
   list-style: none;
-  margin: 0;
-  padding: 4px 0 0;
-  display: flex;
-  flex-direction: column;
-}
-.tier {
-  --indent: 0px;
-  --price: 34px;
-  --icon: 34px;
-  position: relative;
+  margin: 2px 0 0;
+  padding: 12px 0 0; /* aire para el «−» y la cantidad, que asoman por arriba */
   display: grid;
-  grid-template-columns: var(--icon) minmax(0, 1fr) auto auto;
-  align-items: center;
-  column-gap: 12px;
-  padding: 10px 0 10px var(--indent);
-  border-top: 1px dashed color-mix(in srgb, var(--accent-line) 45%, transparent);
+  grid-template-columns: 1.22fr 1fr 0.92fr;
+  gap: 8px;
+  align-items: end;
 }
-.tier[data-nivel="2"] { --indent: var(--step); --price: 25px; --icon: 28px; }
-.tier[data-nivel="3"] { --indent: calc(var(--step) * 2); --price: 19px; --icon: 24px; }
+.tier { --h: 90px; --price: 26px; --icon: 22px; position: relative; min-width: 0; }
+.tier[data-nivel="2"] { --h: 79px; --price: 21px; --icon: 19px; }
+.tier[data-nivel="3"] { --h: 70px; --price: 18px; --icon: 17px; }
 
-/* Escalón: codo de línea desde el nivel anterior hasta el ícono de este nivel. */
-.tier[data-nivel="2"]::before,
-.tier[data-nivel="3"]::before {
-  content: "";
+.tierBtn {
+  position: relative;
+  width: 100%;
+  min-height: var(--h);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "icon price" "label label" "detail detail";
+  align-items: end;
+  column-gap: 6px;
+  padding: 9px 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s var(--ease-out);
+}
+.tier[data-nivel="1"] .tierBtn { background: var(--surface); border-color: color-mix(in srgb, var(--accent-line) 45%, transparent); }
+.tierBtn:hover { border-color: var(--accent-line); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tierBtn:hover { transform: translateY(-2px); }
+}
+.tierBtn:active { transform: scale(0.97); }
+.tier[data-activo] .tierBtn { border-color: var(--accent-line); box-shadow: inset 0 0 0 1px var(--accent-line); }
+
+.tierIcon { grid-area: icon; width: var(--icon); height: var(--icon); color: var(--accent-line); margin-bottom: 2px; }
+.tierPrice { grid-area: price; font-family: var(--font-display); font-size: var(--price); line-height: 1; white-space: nowrap; }
+.tierLabel { grid-area: label; margin-top: 5px; font-size: 13px; line-height: 1.2; }
+.tierDetail { grid-area: detail; font-size: 11.5px; line-height: 1.3; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* «+» discreto arriba a la derecha; cuando ya está en el pedido, la cantidad en su lugar. */
+.tierPlus { position: absolute; top: 7px; right: 7px; color: var(--text-muted); }
+.tier[data-nivel="1"] .tierPlus { color: var(--text); }
+.tierQty {
   position: absolute;
-  left: calc(var(--indent) - var(--step) + 9px);
-  top: -1px;
-  width: calc(var(--step) - 12px);
-  height: calc(50% + 1px);
-  border-left: 1px solid var(--accent-line);
-  border-bottom: 1px solid var(--accent-line);
-  border-bottom-left-radius: 4px;
-  opacity: 0.7;
+  top: -11px;
+  right: 6px;
+  min-width: 24px;
+  height: 24px;
+  padding-inline: 6px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-size: 12px;
+  box-shadow: 0 0 0 2px var(--bg);
 }
+@media (prefers-reduced-motion: no-preference) {
+  .tierQty { animation: qty-in 0.35s var(--ease-spring); }
+}
+@keyframes qty-in { from { transform: scale(0.4); } }
 
-.tierIcon { width: var(--icon); height: var(--icon); color: var(--accent-line); justify-self: center; }
-.tierText { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
-.tierLabel { font-size: 15px; }
-.tier[data-nivel="1"] .tierLabel { font-size: 16px; }
-.tierDetail { font-size: 12.5px; color: var(--text-muted); white-space: nowrap; }
-.tierPrice { font-family: var(--font-display); font-size: var(--price); line-height: 1; white-space: nowrap; }
-.tier[data-nivel="1"] .tierPrice { color: var(--text); }
-
-.addBtn {
-  width: 40px;
-  height: 40px;
+.tierMinus {
+  position: absolute;
+  top: -12px;
+  left: 6px;
+  width: 26px;
+  height: 26px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   border: 1px solid var(--line-strong);
-  background: transparent;
+  background: var(--bg);
   color: var(--text);
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 0 0 2px var(--bg);
   touch-action: manipulation;
 }
-.addBtn:hover { border-color: var(--btn-bg); background: var(--btn-bg); color: var(--btn-text); }
-.addBtn:active { transform: scale(0.92); }
-/* El primer nivel lleva el «+» destacado: es la opción principal. */
-.tier[data-nivel="1"] .addBtn { background: var(--btn-bg); border-color: var(--btn-bg); color: var(--btn-text); }
-.tier[data-nivel="1"] .addBtn:hover { background: color-mix(in srgb, var(--btn-bg) 86%, var(--caramelo)); }
+.tierMinus:hover { border-color: var(--accent-line); color: var(--accent-text); }
 
 /* ── Sello «separado» ── */
 .stamp {
@@ -229,12 +250,13 @@
   .feature { grid-template-columns: 1fr; }
   .featureBody { padding: 0 4px 8px; }
 }
-/* Pantallas muy angostas (iPhone SE): escalón y controles más compactos para que nada se parta. */
+/* Pantallas muy angostas (iPhone SE): bloques un poco más compactos. */
 @media (max-width: 380px) {
-  .tiers { --step: 12px; }
-  .tier { column-gap: 8px; }
-  .tier [role="group"] button { width: 30px; height: 34px; }
-  .tier [role="group"] span { min-width: 20px; }
+  .tiers { gap: 6px; }
+  .tierBtn { padding: 8px 7px 7px; }
+  .tier { --price: 23px; }
+  .tier[data-nivel="2"] { --price: 19px; }
+  .tier[data-nivel="3"] { --price: 16px; }
 }
 
 /* Móvil: una columna (los tres niveles necesitan ancho) y foto más baja para no alargar la carta. */

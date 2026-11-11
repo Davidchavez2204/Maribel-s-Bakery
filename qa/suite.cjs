@@ -95,12 +95,14 @@ const scrollAll = async (p) => p.evaluate(async () => { for (let y = 0; y < docu
       const li = [...ul.querySelectorAll("li")];
       const precio = (x) => Number((x.querySelector('[class*="tierPrice"]')?.textContent ?? "").replace(/[^0-9.]/g, ""));
       const font = (x) => parseFloat(getComputedStyle(x.querySelector('[class*="tierPrice"]')).fontSize);
-      const indent = (x) => parseFloat(getComputedStyle(x).paddingLeft);
-      return { n: li.length, preciosBajan: li.every((x, i) => i === 0 || precio(x) < precio(li[i - 1])), fuenteBaja: li.every((x, i) => i === 0 || font(x) < font(li[i - 1])), escalon: li.every((x, i) => i === 0 || indent(x) > indent(li[i - 1])), iconos: li.every((x) => !!x.querySelector("svg")) };
+      const alto = (x) => x.querySelector("button").getBoundingClientRect().height;
+      return { n: li.length, preciosBajan: li.every((x, i) => i === 0 || precio(x) < precio(li[i - 1])), fuenteBaja: li.every((x, i) => i === 0 || font(x) < font(li[i - 1])), escalon: li.every((x, i) => i === 0 || alto(x) < alto(li[i - 1])), iconos: li.every((x) => !!x.querySelector("svg")) };
     }));
     check("11 productos con 3 niveles: entera, media y porción", tiers.length === 11 && tiers.every((t) => t.n === 3), JSON.stringify(tiers.map((t) => t.n)));
     check("en cada nivel el precio baja (entera > media > porción)", tiers.every((t) => t.preciosBajan));
     check("jerarquía visual: el precio de la entera es el más grande y cada nivel baja un escalón", tiers.every((t) => t.fuenteBaja && t.escalon));
+    const altoPrecios = await page.$eval("#productos article ul", (ul) => ul.getBoundingClientRect().height);
+    check(`bloque de precios compacto (${Math.round(altoPrecios)} px, una sola fila)`, altoPrecios <= 110, altoPrecios);
     check("cada nivel tiene su ícono (entera, media, porción)", tiers.every((t) => t.iconos));
     await ctx.close();
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle, Plus } from "lucide-react";
+import { MessageCircle, Minus, Plus } from "lucide-react";
 import type { MouseEvent } from "react";
 import { SITE } from "@/config/site";
 import { useOrder } from "@/context/OrderContext";
@@ -22,8 +22,8 @@ function precioTexto(o: Opcion): string {
 const nombreOpcion = (p: Producto, o: Opcion) =>
   o.tamano === "unico" ? p.nombre : `${p.nombre}, ${o.etiqueta.toLowerCase()} (${o.detalle})`;
 
-/** Botón «+» de un tamaño o, si ya está en el pedido, su control de cantidad. */
-function OpcionAction({ p, o, variant }: { p: Producto; o: Opcion; variant: "icon" | "full" }) {
+/** Acción de la mesa de postres: «Separar» o, si ya está en el pedido, su control de cantidad. */
+function OpcionAction({ p, o }: { p: Producto; o: Opcion }) {
   const { cart, add, setQty } = useOrder();
   const key = clave(p.id, o.tamano);
   const qty = cart[key] ?? 0;
@@ -31,7 +31,6 @@ function OpcionAction({ p, o, variant }: { p: Producto; o: Opcion; variant: "ico
   if (qty > 0) {
     return (
       <Stepper
-        size={variant === "icon" ? "sm" : "md"}
         qty={qty}
         label={label}
         onDec={() => setQty(key, qty - 1)}
@@ -46,11 +45,7 @@ function OpcionAction({ p, o, variant }: { p: Producto; o: Opcion; variant: "ico
     add(key);
     flyToCart(e.currentTarget);
   };
-  return variant === "icon" ? (
-    <button type="button" className={styles.addBtn} onClick={onClick} aria-label={`Agregar ${label}`}>
-      <Plus size={18} strokeWidth={1.5} aria-hidden="true" />
-    </button>
-  ) : (
+  return (
     <button type="button" className="btn btn-outline btn-sm" onClick={onClick} aria-label={`Separar ${label}`}>
       <Plus size={16} strokeWidth={1.5} aria-hidden="true" />
       Separar
@@ -59,23 +54,53 @@ function OpcionAction({ p, o, variant }: { p: Producto; o: Opcion; variant: "ico
 }
 
 /**
- * Precios escalonados: nivel 1 (entera) grande y, bajando un escalón cada vez, media y porción.
- * El tamaño y la sangría decrecen para que se lea como una jerarquía, no como una lista plana.
+ * Precios escalonados en UNA fila: tres bloques tocables (entera → media → porción).
+ * El «bajar de nivel» se lee de izquierda a derecha: cada bloque es más bajo y su precio más chico.
+ * Tocar un bloque agrega ese tamaño; si ya está en el pedido muestra la cantidad y un «−».
+ * (El detalle de cantidades por línea vive en el panel del pedido.)
  */
 function Niveles({ p }: { p: Producto }) {
+  const { cart, add, setQty } = useOrder();
   return (
     <ul className={styles.tiers} aria-label={`Tamaños y precios de ${p.nombre}`}>
-      {p.opciones.map((o, i) => (
-        <li key={o.tamano} className={styles.tier} data-nivel={i + 1}>
-          <IconoTamano tamano={o.tamano} className={styles.tierIcon} />
-          <span className={styles.tierText}>
-            <span className={styles.tierLabel}>{o.etiqueta}</span>
-            <span className={styles.tierDetail}>{o.detalle}</span>
-          </span>
-          <span className={`${styles.tierPrice} tnum`}>{precioTexto(o)}</span>
-          <OpcionAction p={p} o={o} variant="icon" />
-        </li>
-      ))}
+      {p.opciones.map((o, i) => {
+        const key = clave(p.id, o.tamano);
+        const qty = cart[key] ?? 0;
+        const label = nombreOpcion(p, o);
+        return (
+          <li key={o.tamano} className={styles.tier} data-nivel={i + 1} data-activo={qty > 0 || undefined}>
+            <button
+              type="button"
+              className={styles.tierBtn}
+              aria-label={`Agregar ${label}, ${precioTexto(o)}${qty > 0 ? `. En tu pedido: ${qty}` : ""}`}
+              onClick={(e) => {
+                add(key);
+                flyToCart(e.currentTarget);
+              }}
+            >
+              <IconoTamano tamano={o.tamano} className={styles.tierIcon} />
+              <span className={`${styles.tierPrice} tnum`}>{precioTexto(o)}</span>
+              <span className={styles.tierLabel}>{o.etiqueta}</span>
+              <span className={styles.tierDetail}>{o.detalle}</span>
+              {qty === 0 ? (
+                <Plus size={14} strokeWidth={1.75} className={styles.tierPlus} aria-hidden="true" />
+              ) : (
+                <span className={`${styles.tierQty} tnum`} aria-hidden="true">{qty}</span>
+              )}
+            </button>
+            {qty > 0 && (
+              <button
+                type="button"
+                className={styles.tierMinus}
+                aria-label={`Quitar uno de ${label}`}
+                onClick={() => setQty(key, qty - 1)}
+              >
+                <Minus size={14} strokeWidth={1.75} aria-hidden="true" />
+              </button>
+            )}
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -129,7 +154,7 @@ function FeatureCard({ p }: { p: Producto }) {
         <p className={styles.featureDesc}>{p.desc}</p>
         <p className={styles.unit}>{precioTexto(o)}, {o.detalle.toLowerCase()}</p>
         <div className={styles.featureActions}>
-          <OpcionAction p={p} o={o} variant="full" />
+          <OpcionAction p={p} o={o} />
           <a href={WA_CATERING} target="_blank" rel="noopener noreferrer" className={styles.textLink}>
             <MessageCircle size={16} strokeWidth={1.5} aria-hidden="true" />
             Cotizar mi evento
