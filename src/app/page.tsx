@@ -9,6 +9,7 @@ import { OrderBar } from "@/components/OrderBar";
 import { OrderDrawer } from "@/components/OrderDrawer";
 import { RevealObserver } from "@/components/RevealObserver";
 import { Toast } from "@/components/Toast";
+import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { OrderProvider } from "@/context/OrderContext";
 
 /**
@@ -29,6 +30,7 @@ export default function Home() {
         <About />
       </main>
       <Footer />
+      <WhatsAppFab />
       <OrderBar />
       <Toast />
       <OrderDrawer />

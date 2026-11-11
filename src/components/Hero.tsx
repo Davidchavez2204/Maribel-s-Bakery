@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { CSSProperties } from "react";
 import { ArrowDown, MessageCircle } from "lucide-react";
 import { FOTOS } from "@/data/productos";
-import { WA_CONSULTA } from "@/lib/whatsapp";
+import { WA_PEDIDO } from "@/lib/whatsapp";
 import { HeroParallax } from "./HeroParallax";
 import { Sello } from "./Logo";
 import styles from "./Hero.module.css";
@@ -77,7 +77,7 @@ export function Hero() {
               Ver la carta
               <ArrowDown size={16} strokeWidth={1.5} aria-hidden="true" className={styles.arrow} />
             </a>
-            <a href={WA_CONSULTA} target="_blank" rel="noopener noreferrer" className={`btn ${styles.ctaGhost}`}>
+            <a href={WA_PEDIDO} target="_blank" rel="noopener noreferrer" className={`btn ${styles.ctaGhost}`}>
               <MessageCircle size={18} strokeWidth={1.5} aria-hidden="true" />
               Escríbeme por WhatsApp
             </a>

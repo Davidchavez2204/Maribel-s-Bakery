@@ -1,6 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { SITE } from "@/config/site";
-import { WA_CONSULTA } from "@/lib/whatsapp";
+import { WA_PEDIDO } from "@/lib/whatsapp";
 import { Sello } from "./Logo";
 import styles from "./Footer.module.css";
 
@@ -16,11 +16,11 @@ export function Footer() {
 
         <div className={styles.col}>
           <h2 className={styles.label}>Pedidos y consultas</h2>
-          <a href={WA_CONSULTA} target="_blank" rel="noopener noreferrer" className={`${styles.phone} tnum`}>
+          <a href={WA_PEDIDO} target="_blank" rel="noopener noreferrer" className={`${styles.phone} tnum`}>
             {SITE.telefonoVisible}
           </a>
           <p className={styles.small}>WhatsApp y llamadas</p>
-          <a href={WA_CONSULTA} target="_blank" rel="noopener noreferrer" className={styles.wa}>
+          <a href={WA_PEDIDO} target="_blank" rel="noopener noreferrer" className={styles.wa}>
             <MessageCircle size={18} strokeWidth={1.5} aria-hidden="true" />
             Escríbeme por WhatsApp
           </a>

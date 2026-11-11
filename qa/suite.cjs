@@ -44,6 +44,7 @@ const PRODUCTOS = [
 ];
 const agregar = (page, id, n = 1) => (id === "mesa-postres" ? page.click(sel.mesa) : page.click(sel.nivel(id, n)));
 const todayLima = () => new Date(Date.now() - 5 * 3600e3).toISOString().slice(0, 10);
+const innerWidthOf = (dev) => (dev.viewport ?? dev.screen).width;
 const waText = (href) => decodeURIComponent(new URL(href).searchParams.get("text") ?? "");
 
 async function newPage(browser, opts = {}, { init } = {}) {
@@ -139,6 +140,15 @@ const scrollAll = async (p) => p.evaluate(async () => { for (let y = 0; y < docu
     const wa = await page.$$eval('a[href*="wa.me"]', (as) => [...new Set(as.map((a) => a.href))]);
     check("todos los enlaces de WhatsApp van al 51 922 965 377", wa.length >= 2 && wa.every((h) => h.startsWith("https://wa.me/51922965377?text=")), wa.join(" "));
     check("los enlaces de WhatsApp abren en pestaña nueva y seguros", await page.$$eval('a[href*="wa.me"]', (as) => as.every((a) => a.target === "_blank" && a.rel.includes("noopener"))));
+    const waHeader = waText(await page.getAttribute('header a[href*="wa.me"]', "href"));
+    check("mensaje predeterminado: «Hola Mary, quiero hacer un pedido»", waHeader === "Hola Mary, quiero hacer un pedido", waHeader);
+    const fab = page.locator('a[aria-label^="¿Antojo de otro postre?"]');
+    await page.waitForTimeout(2000); // entrada animada del botón (1.2 s + 0.6 s)
+    const fabBox = await fab.boundingBox();
+    check("botón flotante de WhatsApp visible abajo a la derecha", !!fabBox && fabBox.x + fabBox.width >= 1366 - 40 && fabBox.y + fabBox.height >= 900 - 40, JSON.stringify(fabBox));
+    check("el botón flotante muestra la pregunta en escritorio", await page.isVisible('a[aria-label^="¿Antojo"] :text("¿Antojo de otro postre?")'));
+    const waFab = waText(await fab.getAttribute("href"));
+    check("el botón flotante abre WhatsApp con el saludo y el pedido fuera de carta", waFab.startsWith("Hola Mary, quiero hacer un pedido de un postre que no está en la carta"), waFab);
     await ctx.close();
   }
 
@@ -218,7 +228,7 @@ const scrollAll = async (p) => p.evaluate(async () => { for (let y = 0; y < docu
     const href = await page.getAttribute(sel.send, "href");
     const msg = waText(href);
     const esperado = [
-      "Hola Mary, quisiera separar este pedido:",
+      "Hola Mary, quiero hacer un pedido:",
       "",
       "• 2 × Torta de chocolate · Entera (12 porciones): S/ 170",
       "• 2 × Torta de chocolate · Porción (Individual): S/ 20",
@@ -332,8 +342,15 @@ const scrollAll = async (p) => p.evaluate(async () => { for (let y = 0; y < docu
     await page.locator(sel.nivel("cheesecake-maracuya", 2)).scrollIntoViewIfNeeded();
     await page.tap(sel.nivel("cheesecake-maracuya", 2)).catch(async () => page.click(sel.nivel("cheesecake-maracuya", 2)));
     if ((await badge(page)) === 0) await page.click(sel.nivel("cheesecake-maracuya", 2));
-    await page.waitForTimeout(600);
+    await page.waitForTimeout(2200);
+    const cajas = await page.evaluate(() => {
+      const r = (el) => el && el.getBoundingClientRect();
+      return { fab: r(document.querySelector('a[aria-label^="¿Antojo"]')), bar: r(document.querySelector('[class*="barBtn"]')) };
+    });
+    const choca = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+    check(`${nombre}: el botón de WhatsApp no tapa la barra del pedido`, cajas.fab && cajas.bar && !choca(cajas.fab, cajas.bar) && cajas.fab.right <= innerWidthOf(dev), JSON.stringify(cajas));
     await page.click('[class*="barBtn"]'); await page.waitForTimeout(600);
+    check(`${nombre}: con el panel abierto el botón de WhatsApp se oculta`, await page.$eval('a[aria-label^="¿Antojo"]', (a) => a.inert));
     await page.fill("#pedido-nombre", "Prueba " + nombre);
     const vis = await page.isVisible(sel.send);
     const inView = await page.$eval(sel.send, (a) => { const r = a.getBoundingClientRect(); return r.bottom <= innerHeight && r.top >= 0; });
@@ -344,7 +361,7 @@ const scrollAll = async (p) => p.evaluate(async () => { for (let y = 0; y < docu
       els.filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.width < 24 || r.height < 24); }).map((e) => (e.getAttribute("aria-label") || e.textContent || e.id).trim().slice(0, 30)));
     check(`${nombre}: controles del panel ≥ 24 px`, peq.length === 0, peq.join(", "));
     await page.keyboard.press("Escape"); await page.waitForTimeout(400);
-    const peqPage = await page.$$eval("header a, header button, #productos button, main a.btn, footer a", (els) =>
+    const peqPage = await page.$$eval("header a, header button, #productos button, main a.btn, footer a, a[aria-label^='¿Antojo']", (els) =>
       els.filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.width < 24 || r.height < 24); }).map((e) => (e.getAttribute("aria-label") || e.textContent).trim().slice(0, 30)));
     check(`${nombre}: botones y enlaces de la página ≥ 24 px`, peqPage.length === 0, peqPage.join(", "));
     check(`${nombre}: sin errores`, page.errors.length === 0, page.errors.join(" | "));

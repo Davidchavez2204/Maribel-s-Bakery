@@ -2,7 +2,7 @@
 
 import { MessageCircle, ShoppingBag } from "lucide-react";
 import { useOrder } from "@/context/OrderContext";
-import { WA_CONSULTA } from "@/lib/whatsapp";
+import { WA_PEDIDO } from "@/lib/whatsapp";
 import { LogoHorizontal } from "./Logo";
 import styles from "./Header.module.css";
 
@@ -32,7 +32,7 @@ export function Header() {
 
         <div className={styles.actions}>
           <a
-            href={WA_CONSULTA}
+            href={WA_PEDIDO}
             target="_blank"
             rel="noopener noreferrer"
             className={`btn btn-ghost btn-icon ${styles.waMobile}`}

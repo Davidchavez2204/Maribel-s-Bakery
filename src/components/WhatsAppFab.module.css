@@ -1,0 +1,92 @@
+/* ═══ Botón flotante de WhatsApp ═══ */
+.fab {
+  --gap-borde: max(20px, env(safe-area-inset-bottom));
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: var(--gap-borde);
+  z-index: var(--z-fab);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 20px 7px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--shadow-lg), inset 0 0 0 1px color-mix(in srgb, var(--accent-line) 45%, transparent);
+  transition: transform 0.3s var(--ease-out), opacity 0.25s ease, bottom 0.45s var(--ease-out), padding 0.3s var(--ease-out);
+}
+.fab:hover { transform: translateY(-3px); }
+.fab:active { transform: scale(0.97); }
+.fab[data-oculto] { opacity: 0; transform: translateY(16px); pointer-events: none; }
+
+.icon {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--whatsapp);
+  color: #fff;
+}
+
+.texto { display: flex; flex-direction: column; gap: 2px; line-height: 1.15; white-space: nowrap; }
+.pregunta { font-family: var(--font-display); font-style: italic; font-size: 20px; }
+.detalle { font-size: 13px; color: var(--text-muted); }
+
+/* Con productos en el pedido: solo el ícono (la barra del pedido es la acción principal). */
+.fab[data-compacto] { padding: 6px; }
+.fab[data-compacto] .texto { display: none; }
+
+/* Donde la barra centrada y el botón no caben lado a lado, el botón sube sobre la barra. */
+@media (max-width: 940px) {
+  .fab[data-compacto] { bottom: calc(var(--gap-borde) + 68px); }
+}
+
+/* Móvil: disco verde; la pregunta sale como globo de diálogo y se retira sola para no tapar la carta. */
+@media (max-width: 600px) {
+  .fab { padding: 6px; }
+  .texto {
+    position: absolute;
+    right: calc(100% + 10px);
+    bottom: 8px;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-md), inset 0 0 0 1px color-mix(in srgb, var(--accent-line) 45%, transparent);
+    opacity: 0;
+    visibility: hidden;
+  }
+  .pregunta { font-size: 18px; }
+  .detalle { font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fab { animation: fab-in 0.6s var(--ease-spring) 1.2s backwards; }
+  /* Un pulso suave, dos veces, para que el ojo lo encuentre; luego se queda quieto. */
+  .icon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--whatsapp);
+    opacity: 0;
+    animation: pulso 1.8s ease-out 2s 2;
+  }
+  @media (max-width: 600px) {
+    .fab:not([data-compacto]) .texto { animation: globo 8s ease 1.8s both; }
+  }
+}
+
+@keyframes fab-in { from { opacity: 0; transform: translateY(24px) scale(0.9); } }
+@keyframes pulso {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+@keyframes globo {
+  0% { opacity: 0; visibility: visible; transform: translateX(8px); }
+  6%, 88% { opacity: 1; visibility: visible; transform: none; }
+  100% { opacity: 0; visibility: hidden; transform: translateX(8px); }
+}

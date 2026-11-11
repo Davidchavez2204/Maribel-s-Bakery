@@ -12,7 +12,13 @@ export function waUrl(texto: string): string {
   return `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
 }
 
-export const WA_CONSULTA = waUrl("Hola Mary, quisiera hacerte una consulta.");
+/** Saludo único de todos los enlaces: si cambia, cambia en toda la web (y en el mensaje del pedido). */
+export const SALUDO = "Hola Mary, quiero hacer un pedido";
+
+/** Enlace general (header, hero, barra de anuncio, footer). */
+export const WA_PEDIDO = waUrl(SALUDO);
+/** Botón flotante: pedidos fuera de la carta. Deja el cursor listo para que escriban qué postre quieren. */
+export const WA_ANTOJO = waUrl(`${SALUDO} de un postre que no está en la carta: `);
 export const WA_CATERING = waUrl(
   "Hola Mary, quisiera cotizar una mesa de postres.\nFecha: \nInvitados: \nTemática: ",
 );
@@ -54,7 +60,7 @@ export function hayCotizacion(lineas: readonly LineaPedido[]): boolean {
  */
 export function mensajePedido(lineas: readonly LineaPedido[], datos: DatosPedido): string {
   const total = totalReferencial(lineas);
-  const L: string[] = ["Hola Mary, quisiera separar este pedido:", ""];
+  const L: string[] = [`${SALUDO}:`, ""];
 
   for (const l of lineas) {
     const sub = l.opcion.precio === null ? "a cotizar" : formatMoney(l.opcion.precio * l.qty);
