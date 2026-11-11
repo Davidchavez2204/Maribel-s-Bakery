@@ -95,6 +95,5 @@ node qa/suite.cjs      # terminal 2: resultados en consola y en qa/resultados.js
 ## Pendientes con la clienta
 
 - Carta y precios reales (los actuales son de ejemplo).
-- Fotos reales. **La imagen del hero (`public/fotos/hero.webp`) es una ilustración provisional**: reemplazarla por una foto real con el mismo nombre.
 - Zonas de delivery y horario de atención.
 - Dominio final y `NEXT_PUBLIC_SITE_URL`.

@@ -37,7 +37,8 @@ export function Hero() {
               // Next 16: `priority` precarga, pero la prioridad de red la fija fetchPriority.
               fetchPriority="high"
               loading="eager"
-              sizes="100vw"
+              // En móvil la foto es una franja de ~390×250 px: no hace falta la versión 3x.
+              sizes="(max-width: 760px) 60vw, 100vw"
               className={styles.photo}
               style={{ objectPosition: FOTOS.heroPosicion }}
             />

@@ -184,9 +184,13 @@
 @keyframes spin { to { transform: rotate(120deg); } }
 @keyframes lift { to { transform: translateY(-60px); opacity: 0.2; } }
 
-/* ═══ Móvil: degradado de abajo hacia arriba, el texto apoyado en la parte oscura. ═══ */
+/* ═══ Móvil: la foto ocupa una franja arriba (los postres a la vista) y se funde con el
+   Cacao donde empieza el texto. Con la foto a pantalla completa, el bloque de texto
+   (alto en móvil) tapaba justo la mesa de postres. ═══ */
 @media (max-width: 760px) {
-  .hero { align-items: flex-end; min-height: min(calc(100dvh - var(--header-h) - 34px), 720px); }
+  /* La franja crece con la altura de la pantalla, sin empujar los botones fuera de la vista. */
+  .hero { --band: clamp(180px, calc(100svh - 410px), 300px); align-items: flex-end; min-height: min(calc(100dvh - var(--header-h) - 34px), 720px); }
+  .withPhoto .layer { inset: 0 0 auto 0; height: var(--band); }
   .overlay {
     background: linear-gradient(
       0deg,
@@ -196,10 +200,29 @@
       hsl(var(--hero-base) / 0.3) 100%
     );
   }
+  .withPhoto .overlay {
+    background: linear-gradient(
+      180deg,
+      hsl(var(--hero-base) / 0.05) 0,
+      hsl(var(--hero-base) / 0.15) calc(var(--band) * 0.5),
+      hsl(var(--hero-base) / 0.85) calc(var(--band) * 0.88),
+      hsl(var(--hero-base) / 1) var(--band)
+    );
+  }
   .inner { grid-template-columns: 1fr; padding-block: 120px 40px; }
-  .seal { position: absolute; top: 24px; right: var(--gutter); width: 96px; }
-  .title { font-size: 42px; }
+  .withPhoto .inner { padding-top: calc(var(--band) - 56px); }
+  .seal { position: absolute; top: 16px; right: var(--gutter); width: 88px; }
+  /* Sobre la parte clara de la foto, el sello en Miel necesita un disco oscuro detrás. */
+  .withPhoto .seal {
+    padding: 4px;
+    border-radius: 50%;
+    background: hsl(var(--hero-base) / 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  .title { font-size: clamp(36px, 10.5vw, 42px); }
   .lead { font-size: 16px; }
+  .text { gap: 18px; }
   .ctas > a { flex: 1 1 100%; }
   .watermark { right: -30%; top: 22%; width: 120vw; }
   .glints span { left: calc(10% + var(--i) * 12%); }
